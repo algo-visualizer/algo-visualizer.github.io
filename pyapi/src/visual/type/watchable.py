@@ -31,7 +31,7 @@ class Watchable(ABC):
         Examples:
             ```python
             Watchable('i')
-            Watchable('i + j', expr=True) # The varname will be 'x+y' in this case
+            Watchable('i + j', expr=True) # The varname will be 'i + j' in this case
             Watchable('i, j', expr=True) # Notice that it's not Watchable('i, j')
 
             # Wrong usage

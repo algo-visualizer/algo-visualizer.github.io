@@ -8,9 +8,8 @@ This module is designed to work with Pyodide in the browser environment.
 
 from inspect import currentframe
 import json
-import sys
-from visual.core.io import snapshot_io, redirect_stdout
 from visual.core import watcher
+from visual.core.io import snapshot_io, redirect_stdout
 from visual.core.watcher import WatcherContext, DSWatcherContext
 from typing import Callable
 from visual.type.snapshot import Snapshot
@@ -306,5 +305,5 @@ __all__ = [
     '_visual_api_reset_state',
     '_visual_api_get_snapshots_json',
     '_visual_api_set_linemap',
-    'watcher'
+    'watcher',
 ]

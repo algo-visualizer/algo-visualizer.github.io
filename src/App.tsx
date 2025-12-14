@@ -8,14 +8,7 @@ import { loadPyodideService, runUserCode } from "./services/pyodideService";
 import { instrumentCode } from "./utils/instrumentation";
 import { INITIAL_CODE_2 } from "./constants";
 import { type Snapshot, type LogEntry } from "./types";
-import {
-  AlertCircle,
-  BookOpen,
-  ChevronDown,
-  ChevronRight,
-  Menu,
-  X,
-} from "lucide-react";
+import { AlertCircle, BookOpen, Menu, X } from "lucide-react";
 
 const App: React.FC = () => {
   // State
@@ -125,6 +118,10 @@ const App: React.FC = () => {
   // Derived state
   const currentSnapshot = history[currentStep] || null;
   const activeLine = currentSnapshot ? currentSnapshot.line : null;
+
+  const handleToggleInstrumented = () => {
+    setShowInstrumented((prev) => !prev);
+  };
 
   // Derive logs from history up to currentStep
   const logs = useMemo(() => {
@@ -315,18 +312,6 @@ const App: React.FC = () => {
 
             {/* Instrumented Code Preview (Collapsible) */}
             <div className="flex-shrink-0 border-t border-zinc-800 bg-zinc-900">
-              <button
-                onClick={() => setShowInstrumented(!showInstrumented)}
-                className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-zinc-200 uppercase tracking-wider bg-zinc-900 hover:bg-zinc-800 transition-colors"
-              >
-                {showInstrumented ? (
-                  <ChevronDown className="w-4 h-4" />
-                ) : (
-                  <ChevronRight className="w-4 h-4" />
-                )}
-                Preview Instrumented Code
-              </button>
-
               {showInstrumented && (
                 <div className="h-64 border-t border-zinc-800 relative">
                   <DiffEditor
@@ -402,6 +387,8 @@ const App: React.FC = () => {
           history.length > 0 ? `${currentStep + 1} / ${history.length}` : ""
         }
         isVisualized={isVisualized}
+        onToggleInstrumented={handleToggleInstrumented}
+        showInstrumented={showInstrumented}
       />
     </div>
   );
