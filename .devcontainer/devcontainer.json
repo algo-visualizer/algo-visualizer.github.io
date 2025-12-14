@@ -1,0 +1,26 @@
+{
+    "name": "algo-visualizer",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "build": {
+        "context": "..",
+        "dockerfile": "./Dockerfile"
+    },
+    "features": {
+        //"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    },
+    "remoteEnv": {},
+    /* "runArgs": [
+        "--network=host"
+    ], */
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.,
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "mhutchie.git-graph",
+                "prettier.prettier-vscode"
+            ]
+        }
+    },
+    "remoteUser": "root",
+    "postCreateCommand": "bun install"
+}

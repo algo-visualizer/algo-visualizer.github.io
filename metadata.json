@@ -1,0 +1,5 @@
+{
+  "name": "AlgoViz",
+  "description": "A Python algorithm visualizer using Pyodide and Monaco Editor with breakpoint instrumentation.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,4 @@
+uv build --wheel;
+ or 
+pyodide build
+pyodide-build
