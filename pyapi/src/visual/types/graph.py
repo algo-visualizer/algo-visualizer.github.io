@@ -1,6 +1,6 @@
 from __future__ import annotations # Remove this in Python 3.14
 
-from typing import Annotated, Any, Hashable, Literal
+from typing import Annotated, Hashable, Literal
 from pydantic import BaseModel, Field
 
 type GraphUnion = VarGraph | ArrayGraph | Array2DGraph | NodesGraph

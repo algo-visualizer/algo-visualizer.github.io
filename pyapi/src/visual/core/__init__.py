@@ -12,9 +12,9 @@ from visual.core import watcher
 from visual.core.io import snapshot_io, redirect_stdout
 from visual.core.watcher import WatcherContext, DSWatcherContext
 from typing import Callable
-from visual.type.snapshot import Snapshot
-from visual.type.graph import GraphGroup, NodeId, NodeWeight
-from visual.type.watchable import Array, Array2D, Nodes, Var
+from visual.types.snapshot import Snapshot
+from visual.types.graph import GraphGroup, NodeId, NodeWeight
+from visual.types.watchable import Array, Array2D, Nodes, Var
 
 # Global state for snapshots and configuration
 _snapshots: list[Snapshot] = []

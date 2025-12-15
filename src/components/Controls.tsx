@@ -57,7 +57,7 @@ const Controls: React.FC<ControlsProps> = ({
             onClick={onToggleInstrumented}
             aria-pressed={showInstrumented}
             aria-label="Toggle instrumented code preview"
-            className={`h-10 w-10 flex items-center justify-center rounded-md border text-zinc-400 bg-zinc-900 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0 focus:ring-offset-zinc-900
+            className={`h-10 w-10 flex items-center justify-center rounded-md border text-zinc-400 bg-zinc-900 transition-colors focus:outline-none focus:ring-offset-0 focus:ring-offset-zinc-900
               ${showInstrumented ? "border-emerald-500/50 bg-emerald-950/50 text-emerald-300" : "border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"}
             `}
           >

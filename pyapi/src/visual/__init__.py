@@ -5,7 +5,7 @@ This module provides debugging and visualization capabilities for Python code ex
 in the browser via Pyodide.
 """
 
-from visual.type.watchable import (
+from visual.types.watchable import (
     Var,
     Array,
     Array2D,
@@ -23,8 +23,8 @@ from visual.core import _visual_api_watch_array as array
 from visual.core import _visual_api_watch_array2d as array2d
 from visual.core import _visual_api_watch_nodes as nodes
 
-from visual import core, type
+from visual import core, types
 __all__ = [
-    "core", "type",
+    "core", "types",
     "breakpoint", "var", "array", "array2d", "nodes"   
 ]

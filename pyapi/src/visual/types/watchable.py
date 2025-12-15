@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from collections import deque
 from types import FrameType
 from typing import Callable, Iterable, cast, override
-from visual.type.graph import (
+from visual.types.graph import (
     GraphUnion, VarGraph,
     Pointer, Pointer2D,
     ArrayGraph, ArrayGraphContent, 

@@ -1,7 +1,7 @@
 from typing import Literal
 from pydantic import BaseModel
 
-from visual.type.graph import GraphGroup
+from visual.types.graph import GraphGroup
 
 
 class Snapshot(BaseModel):

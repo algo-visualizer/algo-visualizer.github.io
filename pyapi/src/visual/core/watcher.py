@@ -1,6 +1,6 @@
 from typing import Sequence
 from collections import deque
-from visual.type.watchable import Watchable, DS
+from visual.types.watchable import Watchable, DS
 
 
 class WatcherContext[T: Watchable]:
