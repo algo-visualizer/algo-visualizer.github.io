@@ -9,9 +9,15 @@ let worker: Worker | null = null;
 // Track the current running execution
 let currentRunResolve: ((result: ExecutionResult) => void) | null = null;
 
-export const loadPyodideService = async (
-  pyodideReadyResolve: () => void,
-): Promise<void> => {
+interface LoadPyodideCallback {
+  onPyodideReady: () => void;
+  batchedStdoutResolve: (output: string) => void;
+}
+
+export const loadPyodideService = async ({
+  onPyodideReady,
+  batchedStdoutResolve,
+}: LoadPyodideCallback): Promise<void> => {
   if (worker) return;
 
   worker = new Worker(
@@ -22,10 +28,10 @@ export const loadPyodideService = async (
   );
 
   worker.addEventListener("message", (event: MessageEvent) => {
-    const { type, snapshots, error } = event.data;
+    const { type, snapshots, stdout, error } = event.data;
 
     if (type === "ready") {
-      pyodideReadyResolve();
+      onPyodideReady();
     }
 
     if (type === "result") {
@@ -36,6 +42,10 @@ export const loadPyodideService = async (
         });
         currentRunResolve = null;
       }
+    }
+
+    if (type === "stdout") {
+      batchedStdoutResolve(stdout);
     }
   });
 

@@ -43,7 +43,7 @@ const SnapshotOutput: React.FC<SnapshotOutputProps> = ({ logs, className }) => {
           <div className="flex-1 overflow-y-auto p-4 font-mono text-sm space-y-1">
             {logs.length === 0 && (
               <div className="text-zinc-600 italic select-none">
-                Output will appear here...
+                Snapshot output will appear here...
               </div>
             )}
 

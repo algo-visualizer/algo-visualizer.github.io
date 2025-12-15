@@ -4,6 +4,7 @@ import CodeEditor from "./components/Editor";
 import Visualizer from "./components/Visualizer";
 import Controls from "./components/Controls";
 import SnapshotOutput from "./components/SnapshotOutput";
+import Console from "./components/Console";
 import { loadPyodideService, runUserCode } from "./services/pyodideService";
 import { instrumentCode } from "./utils/instrumentation";
 import { INITIAL_CODE_2 } from "./constants";
@@ -18,10 +19,12 @@ const App: React.FC = () => {
   const [isLSPReady, setIsLSPReady] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
   const [showInstrumented, setShowInstrumented] = useState(false);
+  const [showConsole, setShowConsole] = useState(false);
   const [isVisualized, setIsVisualized] = useState(false);
 
   // Execution State
   const [history, setHistory] = useState<Snapshot[]>([]);
+  const [consoleLogs, setConsoleLogs] = useState<LogEntry[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(-1);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +38,18 @@ const App: React.FC = () => {
 
   // Load Pyodide on mount
   useEffect(() => {
-    loadPyodideService(() => setIsPyodideReady(true)).catch((err) => {
+    loadPyodideService({
+      onPyodideReady: () => {
+        setConsoleLogs([]);
+        setIsPyodideReady(true);
+      },
+      batchedStdoutResolve: (output) => {
+        setConsoleLogs((prev) => [
+          ...prev,
+          { type: "stdout", content: output, timestamp: Date.now() },
+        ]);
+      },
+    }).catch((err) => {
       console.error("Failed to load Pyodide:", err);
       setError("Failed to load Python environment. Please refresh.");
     });
@@ -70,6 +84,7 @@ const App: React.FC = () => {
     setIsExecuting(true);
     setError(null);
     setHistory([]);
+    setConsoleLogs([]);
     setCurrentStep(-1);
 
     try {
@@ -120,11 +135,27 @@ const App: React.FC = () => {
   const activeLine = currentSnapshot ? currentSnapshot.line : null;
 
   const handleToggleInstrumented = () => {
-    setShowInstrumented((prev) => !prev);
+    setShowInstrumented((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowConsole(false);
+      }
+      return next;
+    });
   };
 
-  // Derive logs from history up to currentStep
-  const logs = useMemo(() => {
+  const handleToggleConsole = () => {
+    setShowConsole((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowInstrumented(false);
+      }
+      return next;
+    });
+  };
+
+  // Derive logs from snapshot history up to currentStep
+  const snapshotLogs = useMemo(() => {
     if (currentStep < 0 || !history.length) return [];
 
     const newLogs: LogEntry[] = [];
@@ -273,7 +304,7 @@ const App: React.FC = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-        {/* LEFT COLUMN: Editor & Watch Panel */}
+        {/* LEFT COLUMN: Editor */}
         <div
           className={`flex-col border-r border-zinc-800 h-full lg:h-auto lg:w-1/2 ${
             activeMobileTab === "editor" ? "flex" : "hidden lg:flex"
@@ -310,7 +341,7 @@ const App: React.FC = () => {
               )}
             </div>
 
-            {/* Instrumented Code Preview (Collapsible) */}
+            {/* Instrumented Code Preview / Console (exclusive) */}
             <div className="flex-shrink-0 border-t border-zinc-800 bg-zinc-900">
               {showInstrumented && (
                 <div className="h-64 border-t border-zinc-800 relative">
@@ -333,6 +364,12 @@ const App: React.FC = () => {
                   />
                 </div>
               )}
+
+              {showConsole && (
+                <div className="h-64 border-t border-zinc-800 relative">
+                  <Console className="h-full" logs={consoleLogs} />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -346,7 +383,7 @@ const App: React.FC = () => {
           <div className="flex-1 overflow-hidden min-h-0">
             <Visualizer snapshot={currentSnapshot} />
           </div>
-          <SnapshotOutput logs={logs} className="flex-shrink-0" />
+          <SnapshotOutput logs={snapshotLogs} className="flex-shrink-0" />
         </div>
       </div>
 
@@ -389,6 +426,8 @@ const App: React.FC = () => {
         isVisualized={isVisualized}
         onToggleInstrumented={handleToggleInstrumented}
         showInstrumented={showInstrumented}
+        onToggleConsole={handleToggleConsole}
+        showConsole={showConsole}
       />
     </div>
   );

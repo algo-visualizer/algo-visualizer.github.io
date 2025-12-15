@@ -14,7 +14,7 @@ async function initPyodide() {
 
     pyodide.setStdout({
       batched: (output) => {
-        console.log(output);
+        ctx.postMessage({ type: "stdout", stdout: output });
       },
     });
 
