@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import type { LogEntry } from "../types";
+import type { LogEntry } from "../../types";
 
 interface SnapshotOutputProps {
   logs: LogEntry[];

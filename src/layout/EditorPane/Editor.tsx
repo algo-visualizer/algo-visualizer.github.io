@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 // @ts-ignore
-import PythonLspWorker from "../workers/pythonLspWorker?worker";
+import PythonLspWorker from "../../workers/pythonLspWorker?worker";
 
 interface EditorProps {
   value: string;

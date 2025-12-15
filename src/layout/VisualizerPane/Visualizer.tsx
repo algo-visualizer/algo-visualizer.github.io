@@ -1,5 +1,5 @@
 import React from "react";
-import { type Snapshot, type GraphUnion } from "../types";
+import { type Snapshot, type GraphUnion } from "../../types";
 import ArrayVisualizer from "./ArrayVisualizer";
 import NodesVisualizer from "./NodesVisualizer";
 

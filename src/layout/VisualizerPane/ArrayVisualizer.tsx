@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import * as d3 from "d3";
-import { type ArrayGraph, type ArrayGraphContent } from "../types";
+import { type ArrayGraph, type ArrayGraphContent } from "../../types";
 
 interface ArrayVisualizerProps {
   data: ArrayGraph;
