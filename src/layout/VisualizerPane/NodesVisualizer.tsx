@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import type { NodesGraphContent } from "../types";
+import type { NodesGraphContent } from "../../types";
 
 interface NodesVisualizerProps {
   data: NodesGraphContent;

@@ -1,20 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import type { LogEntry } from "../types";
+import React, { useEffect, useRef } from "react";
+import type { LogEntry } from "../../types";
 
 interface ConsoleProps {
   logs: LogEntry[];
   className?: string;
-  onSendInput?: (value: string) => void;
-  inputPlaceholder?: string;
 }
 
-const Console: React.FC<ConsoleProps> = ({
-  logs,
-  className,
-  onSendInput,
-  inputPlaceholder = "Type input and press Enter (not wired yet)",
-}) => {
-  const [inputValue, setInputValue] = useState("");
+const Console: React.FC<ConsoleProps> = ({ logs, className }) => {
   const endRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll when logs change
@@ -23,15 +15,6 @@ const Console: React.FC<ConsoleProps> = ({
       endRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [logs]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-    if (onSendInput) {
-      onSendInput(inputValue);
-    }
-    setInputValue("");
-  };
 
   return (
     <div
@@ -67,27 +50,6 @@ const Console: React.FC<ConsoleProps> = ({
           ))}
           <div ref={endRef} />
         </div>
-
-        {/* Input row (placeholder for future stdin wiring) */}
-        <form
-          className="border-t border-zinc-800 bg-zinc-900/80 px-3 py-2 flex items-center gap-2"
-          onSubmit={handleSubmit}
-        >
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder={inputPlaceholder}
-            className="flex-1 bg-zinc-900 text-zinc-100 text-sm px-3 py-2 rounded-md border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-          />
-          <button
-            type="submit"
-            className="px-3 py-2 text-xs font-semibold rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!onSendInput}
-          >
-            Send
-          </button>
-        </form>
       </div>
     </div>
   );
