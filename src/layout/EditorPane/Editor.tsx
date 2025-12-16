@@ -36,13 +36,21 @@ const CodeEditor: React.FC<EditorProps> = ({
       styleTag.id = styleId;
       styleTag.textContent = `
         .breakpoint-glyph {
-          background: red;
+          background: rgba(255, 0, 0, 0.6);
           border-radius: 50%;
           width: 12px !important;
           height: 12px !important;
           margin-left: 5px;
           margin-top: 5px;
           cursor: pointer;
+        }
+        .breakpoint-range-line {
+          background: rgba(255, 0, 0, 0.12);
+        }
+        .breakpoint-range-glyph {
+          border-left: 3px solid rgba(255, 0, 0, 0.4);
+          margin-left: 4px;
+          height: 100%;
         }
       `;
       document.head.appendChild(styleTag);
@@ -59,13 +67,20 @@ const CodeEditor: React.FC<EditorProps> = ({
   // Separate refs to manage decorations independently
   const bpDecorationsRef = useRef<string[]>([]);
   const activeDecorationsRef = useRef<string[]>([]);
+  const previewDecorationsRef = useRef<string[]>([]);
 
   const workerRef = useRef<Worker | null>(null);
   const completionProviderRef = useRef<any>(null);
   const hoverProviderRef = useRef<any>(null);
+  const breakpointsRef = useRef<Set<number>>(breakpoints);
 
   // Flag to prevent update loops
   const isSyncingRef = useRef(false);
+
+  // Drag-to-range state
+  const dragStartLineRef = useRef<number | null>(null);
+  const dragCurrentLineRef = useRef<number | null>(null);
+  const isDraggingRangeRef = useRef(false);
 
   // Init LSP Worker
   useEffect(() => {
@@ -231,12 +246,93 @@ const CodeEditor: React.FC<EditorProps> = ({
       );
     }
 
-    // 1. Click handler for gutter (toggling)
+    const clearPreview = () => {
+      if (!editorRef.current) return;
+      previewDecorationsRef.current = editorRef.current.deltaDecorations(
+        previewDecorationsRef.current,
+        [],
+      );
+    };
+
+    const updatePreview = (startLine: number, endLine: number) => {
+      if (!editorRef.current || !monacoRef.current) return;
+      const editorInstance = editorRef.current;
+      const monacoInstance = monacoRef.current;
+      const [from, to] =
+        startLine <= endLine ? [startLine, endLine] : [endLine, startLine];
+
+      const decorations: any[] = [];
+      for (let line = from; line <= to; line++) {
+        decorations.push({
+          range: new monacoInstance.Range(line, 1, line, 1),
+          options: {
+            isWholeLine: true,
+            className: "breakpoint-range-line",
+            glyphMarginClassName: "breakpoint-range-glyph",
+          },
+        });
+      }
+
+      previewDecorationsRef.current = editorInstance.deltaDecorations(
+        previewDecorationsRef.current,
+        decorations,
+      );
+    };
+
+    // 1. Gutter mouse handlers for click or drag-to-range
     editor.onMouseDown((e: any) => {
       if (e.target.type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN) {
         const line = e.target.position.lineNumber;
-        toggleBreakpoint(line);
+        dragStartLineRef.current = line;
+        dragCurrentLineRef.current = line;
+        isDraggingRangeRef.current = false;
       }
+    });
+
+    editor.onMouseMove((e: any) => {
+      if (
+        dragStartLineRef.current !== null &&
+        e.target.position &&
+        e.target.type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+      ) {
+        const currentLine = e.target.position.lineNumber;
+        dragCurrentLineRef.current = currentLine;
+        if (currentLine !== dragStartLineRef.current) {
+          isDraggingRangeRef.current = true;
+        }
+        updatePreview(dragStartLineRef.current, currentLine);
+      }
+    });
+
+    editor.onMouseUp((e: any) => {
+      if (dragStartLineRef.current === null) return;
+
+      const releaseLine =
+        e.target?.position?.lineNumber ?? dragStartLineRef.current;
+      const start = dragStartLineRef.current;
+      const end = releaseLine;
+
+      if (isDraggingRangeRef.current && start !== null && end !== null) {
+        const [from, to] = start <= end ? [start, end] : [end, start];
+        const latest = breakpointsRef.current;
+        const newSet = new Set<number>(latest);
+        for (let line = from; line <= to; line++) {
+          if (newSet.has(line)) {
+            newSet.delete(line);
+          } else {
+            newSet.add(line);
+          }
+        }
+        onBreakpointsChange(newSet);
+      } else {
+        // Treat as single click toggle
+        toggleBreakpoint(start);
+      }
+
+      clearPreview();
+      dragStartLineRef.current = null;
+      dragCurrentLineRef.current = null;
+      isDraggingRangeRef.current = false;
     });
 
     // 2. Content Change Handler (Sticky Breakpoints)
@@ -328,6 +424,12 @@ const CodeEditor: React.FC<EditorProps> = ({
         hoverProviderRef.current.dispose();
         hoverProviderRef.current = null;
       }
+      if (previewDecorationsRef.current.length && editorRef.current) {
+        previewDecorationsRef.current = editorRef.current.deltaDecorations(
+          previewDecorationsRef.current,
+          [],
+        );
+      }
     };
   }, []);
 
@@ -355,6 +457,11 @@ const CodeEditor: React.FC<EditorProps> = ({
       newDecorations,
     );
   }, [activeLine]);
+
+  // Keep a ref of latest breakpoints for stable event handlers
+  useEffect(() => {
+    breakpointsRef.current = breakpoints;
+  }, [breakpoints]);
 
   return (
     <div className="h-full w-full overflow-hidden">
