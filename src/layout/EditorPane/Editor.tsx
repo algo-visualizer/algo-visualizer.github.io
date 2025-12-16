@@ -26,6 +26,36 @@ const CodeEditor: React.FC<EditorProps> = ({
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
 
+  // Inject breakpoint glyph style locally so we don't rely on global index.html
+  useEffect(() => {
+    const styleId = "monaco-breakpoint-glyph-style";
+    let styleTag = document.getElementById(styleId) as HTMLStyleElement | null;
+
+    if (!styleTag) {
+      styleTag = document.createElement("style");
+      styleTag.id = styleId;
+      styleTag.textContent = `
+        .breakpoint-glyph {
+          background: red;
+          border-radius: 50%;
+          width: 12px !important;
+          height: 12px !important;
+          margin-left: 5px;
+          margin-top: 5px;
+          cursor: pointer;
+        }
+      `;
+      document.head.appendChild(styleTag);
+    }
+
+    return () => {
+      // Only remove if we were the ones to add it
+      if (styleTag && styleTag.parentElement) {
+        styleTag.parentElement.removeChild(styleTag);
+      }
+    };
+  }, []);
+
   // Separate refs to manage decorations independently
   const bpDecorationsRef = useRef<string[]>([]);
   const activeDecorationsRef = useRef<string[]>([]);
