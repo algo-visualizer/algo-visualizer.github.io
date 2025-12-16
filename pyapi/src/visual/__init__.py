@@ -19,6 +19,7 @@ from visual.core import watcher
 
 from visual.core import _visual_api_breakpoint as breakpoint
 from visual.core import _visual_api_watch_var as var
+from visual.core import _visual_api_inherit as inherit
 from visual.core import _visual_api_watch_array as array
 from visual.core import _visual_api_watch_array2d as array2d
 from visual.core import _visual_api_watch_nodes as nodes
@@ -26,5 +27,6 @@ from visual.core import _visual_api_watch_nodes as nodes
 from visual import core, types
 __all__ = [
     "core", "types",
-    "breakpoint", "var", "array", "array2d", "nodes"   
+    "breakpoint", "inherit", 
+    "var", "array", "array2d", "nodes"   
 ]

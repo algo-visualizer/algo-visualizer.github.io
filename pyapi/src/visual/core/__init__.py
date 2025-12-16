@@ -8,13 +8,14 @@ This module is designed to work with Pyodide in the browser environment.
 
 from inspect import currentframe
 import json
+from copy import deepcopy
 from visual.core import watcher
 from visual.core.io import snapshot_io, redirect_stdout
 from visual.core.watcher import WatcherContext, DSWatcherContext
 from typing import Callable
 from visual.types.snapshot import Snapshot
 from visual.types.graph import GraphGroup, NodeId, NodeWeight
-from visual.types.watchable import Array, Array2D, Nodes, Var
+from visual.types.watchable import Watchable, Array, Array2D, Nodes, Var, DS
 
 # Global state for snapshots and configuration
 _snapshots: list[Snapshot] = []
@@ -77,6 +78,7 @@ def _visual_api_breakpoint(condition_expr: str | None = None) -> Snapshot | None
     _snapshots.append(snapshot)
 
     return snapshot
+    
 
 def _visual_api_watch_var(var: str, *vars: str, expr: bool = False) -> WatcherContext[Var]:
     """
@@ -109,6 +111,37 @@ def _visual_api_watch_var(var: str, *vars: str, expr: bool = False) -> WatcherCo
         l.append(v)
         watcher.watch(v)
     return WatcherContext(l)
+
+def _visual_api_inherit(ds_var: str) -> DSWatcherContext[DS]:
+    """
+    Inherit (deepcopy) the watchable at the top of the registry stack. The watchable must be a DS.
+
+    **It is recommended to be used when you have instantiated a complex `DSWatcherContext` and you don't want to repeat the same instantiation operations.**
+
+    Args:
+        ds_var (str): The variable name of the watchable to inherit.
+
+    Examples:
+        ```python
+        array('arr').index('i', 'j') 
+
+        with inherit('arr').index('k'): # Register a new watchable inherited from the latest 'arr' watchable
+            ...
+            breakpoint() # It will show 'arr' with the index 'i', 'j', 'k'
+        breakpoint() # It will show 'arr' with the index 'i', 'j'
+        ```
+    Returns:
+        DSWatcherContext[DS]: The context manager containing the inherited watchable.
+    """
+    registry = watcher.get_registry()
+    if not registry.get(ds_var):
+        raise ValueError(f"Can't inherit variable {ds_var} that has no watchable existing")
+    w = registry[ds_var][-1]
+    if not isinstance(w, DS):
+        raise ValueError(f"Can't inherit watchable {ds_var} that is not a DS ")
+    new_w = deepcopy(w)
+    watcher.watch(new_w)
+    return DSWatcherContext([new_w])
 
 
 def _visual_api_watch_array(var: str, *vars: str, expr: bool = False) -> DSWatcherContext[Array]:
@@ -299,6 +332,7 @@ def _visual_api_set_linemap(linemap: dict | str):
 __all__ = [
     '_visual_api_breakpoint',
     '_visual_api_watch_var',
+    '_visual_api_inherit',
     '_visual_api_watch_array',
     '_visual_api_watch_array2d',
     '_visual_api_watch_nodes',

@@ -51,13 +51,6 @@ def get_children_keys(key):
 def get_value(key):
     return _nodes.get(key)
 
-def declare_nodes():
-    return nodes('avl', 
-        lambda avl: avl.root.key if avl.root else None,
-        lambda _, key: get_children_keys(key),
-        lambda _, key: get_value(key),
-    ).item('avl.root', expr=True)
-
 class Node:
     def __init__(self, key):
         self.key, self.height = key, 1
@@ -72,7 +65,7 @@ class AVLTree:
     def update_height(self, node): node.height = 1 + max(self.height(node.left), self.height(node.right))
 
     def rotate_left(self, z):
-        with declare_nodes().item('y', 'z', 'T2'):
+        with inherit('avl').item('y', 'z', 'T2'):
             y = z.right
             breakpoint()
             T2 = y.left
@@ -86,7 +79,7 @@ class AVLTree:
         return y
 
     def rotate_right(self, z):
-        with declare_nodes().item('y', 'z', 'T2'):
+        with inherit('avl').item('y', 'z', 'T2'):
             y = z.left
             breakpoint()
             T2 = y.right
@@ -105,7 +98,7 @@ class AVLTree:
         else: root.right = self.insert(root.right, key)
         self.update_height(root)
 
-        with var('balance'), declare_nodes():
+        with var('balance'):
             balance = self.balance(root)
             if balance > 1 and key < root.left.key:
                 breakpoint()
@@ -136,7 +129,11 @@ class AVLTree:
     def insert_key(self, key):
         self.root = self.insert(self.root, key)
 
-declare_nodes()
+nodes('avl', 
+    lambda avl: avl.root.key if avl.root else None,
+    lambda _, key: get_children_keys(key),
+    lambda _, key: get_value(key),
+).item('avl.root', expr=True)
 
 avl = AVLTree()
 keys = [10, 20, 30, 40, 50, 25]
