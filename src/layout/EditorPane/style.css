@@ -1,0 +1,29 @@
+/* Monaco-specific styles scoped to editor pane */
+
+/* Active line highlight used by Monaco decoration class */
+.monaco-active-line {
+  background: rgba(255, 213, 0, 0.1);
+  border-left: 2px solid rgba(255, 213, 0, 0.65);
+}
+
+/* Breakpoint glyph styling (gutter circles) */
+.breakpoint-glyph {
+  background: rgba(255, 0, 0, 0.6);
+  border-radius: 50%;
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+/* Drag-to-range highlight lines and gutter marker */
+.breakpoint-range-line {
+  background: rgba(255, 0, 0, 0.12);
+}
+
+.breakpoint-range-glyph {
+  border-left: 3px solid rgba(255, 0, 0, 0.4);
+  margin-left: 4px;
+  height: 100%;
+}

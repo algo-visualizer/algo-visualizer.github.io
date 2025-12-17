@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
-// @ts-ignore
+import "./style.css";
 import PythonLspWorker from "../../workers/pythonLspWorker?worker";
 
 interface EditorProps {
@@ -26,43 +26,7 @@ const CodeEditor: React.FC<EditorProps> = ({
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
 
-  // Inject breakpoint glyph style locally so we don't rely on global index.html
-  useEffect(() => {
-    const styleId = "monaco-breakpoint-glyph-style";
-    let styleTag = document.getElementById(styleId) as HTMLStyleElement | null;
-
-    if (!styleTag) {
-      styleTag = document.createElement("style");
-      styleTag.id = styleId;
-      styleTag.textContent = `
-        .breakpoint-glyph {
-          background: rgba(255, 0, 0, 0.6);
-          border-radius: 50%;
-          width: 12px !important;
-          height: 12px !important;
-          margin-left: 5px;
-          margin-top: 5px;
-          cursor: pointer;
-        }
-        .breakpoint-range-line {
-          background: rgba(255, 0, 0, 0.12);
-        }
-        .breakpoint-range-glyph {
-          border-left: 3px solid rgba(255, 0, 0, 0.4);
-          margin-left: 4px;
-          height: 100%;
-        }
-      `;
-      document.head.appendChild(styleTag);
-    }
-
-    return () => {
-      // Only remove if we were the ones to add it
-      if (styleTag && styleTag.parentElement) {
-        styleTag.parentElement.removeChild(styleTag);
-      }
-    };
-  }, []);
+  // Static CSS now lives in Editor.css; no dynamic injection needed
 
   // Separate refs to manage decorations independently
   const bpDecorationsRef = useRef<string[]>([]);
@@ -446,7 +410,7 @@ const CodeEditor: React.FC<EditorProps> = ({
         range: new monaco.Range(activeLine, 1, activeLine, 1),
         options: {
           isWholeLine: true,
-          className: "bg-yellow-900/50 border-l-2 border-yellow-500",
+          className: "monaco-active-line",
         },
       });
       editor.revealLineInCenter(activeLine);

@@ -28,7 +28,8 @@
     "noUncheckedSideEffectImports": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "types": ["vite/client"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

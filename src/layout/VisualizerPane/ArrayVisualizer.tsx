@@ -107,9 +107,19 @@ const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, name }) => {
       if (typeof ptr.index !== "number") return; // Skip complex indices for now
 
       const i = ptr.index;
-      if (i < 0 || i >= values.length) return; // Skip out of bounds
+      const isLeftSentinel = i === -1;
+      const isRightSentinel = i === values.length;
 
-      const x = startX + i * (CELL_SIZE + CELL_PADDING) + CELL_SIZE / 2;
+      // Allow sentinel pointers at -1 and n (right-open interval), otherwise enforce bounds
+      if (!isLeftSentinel && !isRightSentinel && (i < 0 || i >= values.length))
+        return;
+
+      const cellSpan = CELL_SIZE + CELL_PADDING;
+      const x = isLeftSentinel
+        ? startX - CELL_PADDING
+        : isRightSentinel
+          ? startX + values.length * cellSpan - CELL_PADDING
+          : startX + i * cellSpan + CELL_SIZE / 2;
       const targetY = startY; // Top of the cell box
 
       // Pointers from Top
