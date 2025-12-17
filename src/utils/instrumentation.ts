@@ -27,6 +27,12 @@ export const instrumentCode = (code: string, breakpoints: Set<number>) => {
           if (line !== undefined && /\S/.test(line)) {
             const match = line.match(/^(\s*)/);
             indent = match?.[1] ?? "";
+
+            // If the first non-blank line above ends with a colon, add one extra indentation level
+            if (line.trimEnd().endsWith(":")) {
+              const indentUnit = /\t/.test(indent) ? "\t" : "    ";
+              indent += indentUnit;
+            }
             break;
           }
         }
