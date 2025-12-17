@@ -23,7 +23,7 @@ const VisualizerPane: React.FC<VisualizerPaneProps> = ({
       <div className="flex-1 overflow-hidden min-h-0">
         <Visualizer snapshot={snapshot} />
       </div>
-      <SnapshotOutput logs={logs} className="flex-shrink-0" />
+      <SnapshotOutput logs={logs} className="shrink-0" />
     </div>
   );
 };
