@@ -39,7 +39,7 @@ const SnapshotOutput: React.FC<SnapshotOutputProps> = ({ logs, className }) => {
 
       {/* Content */}
       {!isCollapsed && (
-        <div className="flex-1 flex flex-col min-h-0 h-48">
+        <div className="flex-1 flex flex-col min-h-0 max-h-64 overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 font-mono text-sm space-y-1">
             {logs.length === 0 && (
               <div className="text-zinc-600 italic select-none">

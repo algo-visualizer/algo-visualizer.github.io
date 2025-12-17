@@ -13,7 +13,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
   onOpenMenu,
 }) => {
   return (
-    <div className="h-12 border-b border-zinc-800 flex items-center px-4 bg-zinc-900 flex-shrink-0">
+    <div className="h-12 border-b border-zinc-800 flex items-center px-4 bg-zinc-900 shrink-0">
       {/* Hamburger Menu Button - visible only on small screens */}
       <button
         onClick={onOpenMenu}
@@ -23,7 +23,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         <Menu className="w-5 h-5" />
       </button>
 
-      <h1 className="font-bold text-lg tracking-tight bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
+      <h1 className="font-bold text-lg tracking-tight bg-linear-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
         Algo Visualizer
       </h1>
       <span className="mx-3 text-zinc-600 hidden sm:inline">|</span>
@@ -55,7 +55,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         className="ml-auto hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-100 bg-zinc-800/50 hover:bg-zinc-700/70 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-200 group"
       >
         <BookOpen className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
-        <span>API Docs</span>
+        <span>API Reference</span>
       </a>
     </div>
   );

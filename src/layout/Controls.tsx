@@ -94,7 +94,7 @@ const Controls: React.FC<ControlsProps> = ({
 
       {/* Playback Controls */}
       <div className="flex items-center gap-2">
-        <span className="text-zinc-500 text-sm font-mono mr-4">
+        <span className="text-zinc-500 text-sm font-mono mr-4 whitespace-nowrap min-w-12 text-right">
           {stepsInfo}
         </span>
 

@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Algo Visualizer</title>
-    <!-- We keep Tailwind CDN for simplicity, but in a real prod app you might want to install it -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/src/style.css" rel="stylesheet" />
     <style>
       /* Scrollbar styling */
       ::-webkit-scrollbar {
@@ -25,7 +24,7 @@
     </style>
   </head>
   <body class="bg-zinc-950 text-zinc-100 overflow-hidden">
-    <div id="root" class="h-[100dvh] w-screen flex flex-col"></div>
+    <div id="root" class="h-dvh w-screen flex flex-col"></div>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
