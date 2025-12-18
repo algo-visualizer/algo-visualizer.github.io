@@ -22,7 +22,7 @@ const LowerPanel: React.FC<LowerPanelProps> = ({ activePanel, panels }) => {
   if (!activeDef) return null;
 
   return (
-    <div className="flex-shrink-0 border-t border-zinc-800 bg-zinc-900">
+    <div className="shrink-0 border-t border-zinc-800 bg-zinc-900">
       <div className="h-64 border-t border-zinc-800 relative">
         {activeDef.render()}
       </div>

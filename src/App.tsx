@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Group, Panel, Separator } from "react-resizable-panels";
 import { loadPyodideService, runUserCode } from "./services/pyodideService";
 import { instrumentCode } from "./utils/instrumentation";
 import { INITIAL_CODE_2 } from "./constants";
@@ -24,6 +25,7 @@ const App: React.FC = () => {
   const [isExecuting, setIsExecuting] = useState(false);
   const [activePanel, setActivePanel] = useState<PanelKey>(null);
   const [isVisualized, setIsVisualized] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Execution State
   const [history, setHistory] = useState<Snapshot[]>([]);
@@ -56,6 +58,15 @@ const App: React.FC = () => {
       console.error("Failed to load Pyodide:", err);
       setError("Failed to load Python environment. Please refresh.");
     });
+  }, []);
+
+  // Track desktop breakpoint (lg: 1024px)
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const updateMatch = () => setIsDesktop(media.matches);
+    updateMatch();
+    media.addEventListener("change", updateMatch);
+    return () => media.removeEventListener("change", updateMatch);
   }, []);
 
   const handleLSPReady = () => {
@@ -141,6 +152,12 @@ const App: React.FC = () => {
     setActivePanel((prev) => (prev === panel ? null : panel));
   };
 
+  // Placeholder for future layout persistence
+  const handleLayoutChange = useCallback((layout: Record<string, number>) => {
+    // e.g., localStorage.setItem("panel-layout", JSON.stringify(layout));
+    void layout;
+  }, []);
+
   // Derive logs from snapshot history up to currentStep
   const snapshotLogs = useMemo(() => {
     if (currentStep < 0 || !history.length) return [];
@@ -183,47 +200,102 @@ const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-        <EditorPane
-          code={code}
-          onChange={setCode}
-          breakpoints={breakpoints}
-          toggleBreakpoint={toggleBreakpoint}
-          onBreakpointsChange={handleBreakpointsChange}
-          onLSPReady={handleLSPReady}
-          activeLine={activeLine}
-          error={error}
-          setError={setError}
-          isActive={activeMobileTab === "editor"}
+      {isDesktop ? (
+        <Group
+          orientation="horizontal"
+          className="flex-1 flex flex-col lg:flex-row overflow-hidden relative"
+          defaultLayout={{ left: 50, right: 50 }}
+          onLayoutChange={handleLayoutChange}
         >
-          <LowerPanel
-            activePanel={activePanel}
-            panels={[
-              {
-                key: "instrumented",
-                label: "Instrumented",
-                render: () => (
-                  <InstrumentedPanel
-                    original={code}
-                    modified={instrumentedCodePreview}
-                  />
-                ),
-              },
-              {
-                key: "console",
-                label: "Console",
-                render: () => <ConsolePanel logs={consoleLogs} />,
-              },
-            ]}
-          />
-        </EditorPane>
+          <Panel id="left" className="min-w-0 h-full">
+            <EditorPane
+              code={code}
+              onChange={setCode}
+              breakpoints={breakpoints}
+              toggleBreakpoint={toggleBreakpoint}
+              onBreakpointsChange={handleBreakpointsChange}
+              onLSPReady={handleLSPReady}
+              activeLine={activeLine}
+              error={error}
+              setError={setError}
+              isActive
+            >
+              <LowerPanel
+                activePanel={activePanel}
+                panels={[
+                  {
+                    key: "instrumented",
+                    label: "Instrumented",
+                    render: () => (
+                      <InstrumentedPanel
+                        original={code}
+                        modified={instrumentedCodePreview}
+                      />
+                    ),
+                  },
+                  {
+                    key: "console",
+                    label: "Console",
+                    render: () => <ConsolePanel logs={consoleLogs} />,
+                  },
+                ]}
+              />
+            </EditorPane>
+          </Panel>
 
-        <VisualizerPane
-          snapshot={currentSnapshot}
-          logs={snapshotLogs}
-          isActive={activeMobileTab === "visualizer"}
-        />
-      </div>
+          <Separator className="w-3 bg-zinc-900 hover:bg-zinc-800 transition-colors" />
+
+          <Panel id="right" className="min-w-0 h-full">
+            <VisualizerPane
+              snapshot={currentSnapshot}
+              logs={snapshotLogs}
+              isActive
+            />
+          </Panel>
+        </Group>
+      ) : (
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+          <EditorPane
+            code={code}
+            onChange={setCode}
+            breakpoints={breakpoints}
+            toggleBreakpoint={toggleBreakpoint}
+            onBreakpointsChange={handleBreakpointsChange}
+            onLSPReady={handleLSPReady}
+            activeLine={activeLine}
+            error={error}
+            setError={setError}
+            isActive={activeMobileTab === "editor"}
+          >
+            <LowerPanel
+              activePanel={activePanel}
+              panels={[
+                {
+                  key: "instrumented",
+                  label: "Instrumented",
+                  render: () => (
+                    <InstrumentedPanel
+                      original={code}
+                      modified={instrumentedCodePreview}
+                    />
+                  ),
+                },
+                {
+                  key: "console",
+                  label: "Console",
+                  render: () => <ConsolePanel logs={consoleLogs} />,
+                },
+              ]}
+            />
+          </EditorPane>
+
+          <VisualizerPane
+            snapshot={currentSnapshot}
+            logs={snapshotLogs}
+            isActive={activeMobileTab === "visualizer"}
+          />
+        </div>
+      )}
 
       <MobileTabs
         activeMobileTab={activeMobileTab}

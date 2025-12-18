@@ -16,7 +16,7 @@ const VisualizerPane: React.FC<VisualizerPaneProps> = ({
 }) => {
   return (
     <div
-      className={`bg-zinc-950 flex-col h-full lg:h-auto lg:w-1/2 ${
+      className={`bg-zinc-950 flex-col h-full ${
         isActive ? "flex" : "hidden lg:flex"
       }`}
     >
