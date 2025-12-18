@@ -20,6 +20,14 @@ export const instrumentCode = (code: string, breakpoints: Set<number>) => {
       if (/\S/.test(lineContent)) {
         const match = lineContent.match(/^(\s*)/);
         indent = match?.[1] ?? "";
+
+        // If the current non-blank line is an else/elif/except/finally clause,
+        // add one extra indentation level
+        const trimmed = lineContent.trimStart();
+        if (/^(?:else|elif|except|finally)\b/.test(trimmed)) {
+          const indentUnit = /\t/.test(indent) ? "\t" : "    ";
+          indent += indentUnit;
+        }
       } else {
         // Search backwards
         for (let j = i - 1; j >= 0; j--) {
