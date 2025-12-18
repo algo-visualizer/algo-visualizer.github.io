@@ -51,7 +51,7 @@ const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, name }) => {
       .attr("d", "M 0 0 L 10 5 L 0 10 z")
       .attr("fill", "#fbbf24"); // Amber-400
 
-    const startX = 20;
+    const startX = 50;
     const startY = 75; // Middle of the SVG
 
     // Render Array Cells
@@ -103,29 +103,43 @@ const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, name }) => {
     });
 
     // Pointers
+    // Group pointers by index
+    const pointersByIndex = new Map<number, string[]>();
     pointers.forEach((ptr) => {
-      if (typeof ptr.index !== "number") return; // Skip complex indices for now
+      if (typeof ptr.index !== "number") return;
 
       const i = ptr.index;
+      // Filter invalid pointers early unless they are sentinels
       const isLeftSentinel = i === -1;
       const isRightSentinel = i === values.length;
-
-      // Allow sentinel pointers at -1 and n (right-open interval), otherwise enforce bounds
       if (!isLeftSentinel && !isRightSentinel && (i < 0 || i >= values.length))
         return;
 
+      if (!pointersByIndex.has(i)) {
+        pointersByIndex.set(i, []);
+      }
+      pointersByIndex.get(i)!.push(ptr.name);
+    });
+
+    // Render grouped pointers
+    pointersByIndex.forEach((names, i) => {
+      const isLeftSentinel = i === -1;
+      const isRightSentinel = i === values.length;
+      const isSentinel = isLeftSentinel || isRightSentinel;
+
       const cellSpan = CELL_SIZE + CELL_PADDING;
       const x = isLeftSentinel
-        ? startX - CELL_PADDING
+        ? startX - CELL_PADDING * 5
         : isRightSentinel
-          ? startX + values.length * cellSpan - CELL_PADDING
+          ? startX + values.length * cellSpan - CELL_PADDING * 5
           : startX + i * cellSpan + CELL_SIZE / 2;
       const targetY = startY; // Top of the cell box
 
       // Pointers from Top
       const ptrG = svg
         .append("g")
-        .attr("transform", `translate(${x}, ${targetY - 5})`);
+        .attr("transform", `translate(${x}, ${targetY - 5})`)
+        .attr("opacity", isSentinel ? 0.3 : 1);
 
       // Arrow line
       ptrG
@@ -146,7 +160,7 @@ const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ data, name }) => {
         .attr("text-anchor", "middle")
         .attr("fill", "#fbbf24") // Amber-400
         .attr("font-weight", "bold")
-        .text(ptr.name);
+        .text(names.join(", "));
     });
   }, [content, name]);
 

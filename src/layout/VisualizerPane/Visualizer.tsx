@@ -2,6 +2,7 @@ import React from "react";
 import { type Snapshot } from "../../types";
 import { type GraphUnion } from "./graphTypes";
 import ArrayVisualizer from "./ArrayVisualizer";
+import Array2DVisualizer from "./Array2DVisualizer";
 import NodesVisualizer from "./NodesVisualizer";
 
 interface VisualizerProps {
@@ -22,6 +23,9 @@ const Visualizer: React.FC<VisualizerProps> = ({ snapshot }) => {
     switch (item.type) {
       case "array":
         return <ArrayVisualizer key={key} name={key} data={item} />;
+
+      case "array2d":
+        return <Array2DVisualizer key={key} name={key} data={item} />;
 
       case "nodes":
         if (typeof item.content === "string") {
@@ -52,7 +56,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ snapshot }) => {
             key={key}
             className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 text-zinc-500 text-sm"
           >
-            {key}: {item.type} (Not implemented)
+            {key}: {(item as any).type} (Not implemented)
           </div>
         );
     }

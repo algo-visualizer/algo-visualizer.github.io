@@ -25,12 +25,17 @@ export interface ArrayGraph {
   content: string | ArrayGraphContent; // Can be string if not captured or error? Schema says anyOf string or content object
 }
 
+export interface Array2DGraphContent {
+  value: string[][];
+  pointers: [Pointer, Pointer][];
+}
+
 export interface Array2DGraph {
   type: "array2d";
   frameid: string;
   parent_frameid: string | null;
   notcaptured: boolean;
-  content: string | any; // Placeholder for now
+  content: string | Array2DGraphContent;
 }
 
 export interface NodesGraphContentItem {
