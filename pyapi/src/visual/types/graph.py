@@ -15,15 +15,9 @@ class VarGraph(Graph):
     type: Literal["var"] = "var"
     content: str
 
-
 class Pointer(BaseModel):
     name: str
     index: int | str
-    notcaptured: bool
-
-class Pointer2D(BaseModel):
-    name: str
-    index: tuple[int, int] | str
     notcaptured: bool
 
 class ArrayGraph(Graph):
@@ -40,7 +34,7 @@ class Array2DGraph(Graph):
 
 class Array2DGraphContent(BaseModel):
     value: list[list[str]] = Field(default_factory=list)
-    pointers: list[Pointer2D] = Field(default_factory=list)
+    pointers: list[tuple[Pointer, Pointer]] = Field(default_factory=list)
 
 type NodeId = int | str | None
 type NodeWeight = Hashable

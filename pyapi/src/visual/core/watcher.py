@@ -1,6 +1,7 @@
 from typing import Sequence
 from collections import deque
-from visual.types.watchable import Watchable, DS
+from visual.types.pointable import Pointable, Pointable2D, DS
+from visual.types.watchable import Watchable
 
 
 class WatcherContext[T: Watchable]:
@@ -17,9 +18,13 @@ class DSWatcherContext[T: DS](WatcherContext[T]):
     def __init__(self, watchables: Sequence[T]):
         super().__init__(watchables)
 
+class PointableWatcherContext[T: Pointable](DSWatcherContext[T]):
+    def __init__(self, watchables: Sequence[T]):
+        super().__init__(watchables)
+
     def index(self, var: str, *vars: str, expr: bool = False):
         """
-        Register variables to be used as index pointers for all DS watchables.
+        Register variables to be used as index pointers for all pointable watchables.
         
         Args:
             var (str): The variable name to be used as index pointer.
@@ -27,7 +32,7 @@ class DSWatcherContext[T: DS](WatcherContext[T]):
             expr (bool): Whether the `var` and `*vars` are actually expressions.
         
         Returns:
-            DSWatcherContext: Returns self to enable method chaining.
+            PointableWatcherContext: Returns self to enable method chaining.
         """
         for s in (var, *vars):
             for w in self.watchables:
@@ -36,7 +41,7 @@ class DSWatcherContext[T: DS](WatcherContext[T]):
 
     def item(self, var: str, *vars: str, expr: bool = False):
         """
-        Register variables to be used as item pointers for all DS watchables.
+        Register variables to be used as item pointers for all pointable watchables.
         
         Args:
             var (str): The variable name to be used as item pointer.
@@ -44,13 +49,50 @@ class DSWatcherContext[T: DS](WatcherContext[T]):
             expr (bool): Whether the `var` and `*vars` are actually expressions.
         
         Returns:
-            DSWatcherContext: Returns self to enable method chaining.
+            PointableWatcherContext: Returns self to enable method chaining.
         """
         for s in (var, *vars):
             for w in self.watchables:
                 w.add_item(s, expr=expr)
         return self
 
+class Pointable2DWatcherContext[T: Pointable2D](DSWatcherContext[T]):
+    def __init__(self, watchables: Sequence[T]):
+        super().__init__(watchables)
+
+    def index(self, var: tuple[str, str], *vars: tuple[str, str], expr: bool = False):
+        """
+        Register variables to be used as index pointers for all pointable2d watchables.
+        
+        Args:
+            var (tuple[str, str]): The (row, col) tuple variable names to be used as index pointer.
+            *vars (tuple[str, str]): Additional (row, col) tuple variable names to be used as index pointers.
+            expr (bool): Whether the `var` and `*vars` are actually expressions.
+        
+        Returns:
+            Pointable2DWatcherContext: Returns self to enable method chaining.
+        """
+        for s in (var, *vars):
+            for w in self.watchables:
+                w.add_index(s, expr=expr)
+        return self
+
+    def item(self, var: str, *vars: str, expr: bool = False):
+        """
+        Register variables to be used as item pointers for all pointable2d watchables.
+        
+        Args:
+            var (str): The variable name to be used as item pointer.
+            *vars (str): Additional variable names to be used as item pointers.
+            expr (bool): Whether the `var` and `*vars` are actually expressions.
+        
+        Returns:
+            Pointable2DWatcherContext: Returns self to enable method chaining.
+        """
+        for s in (var, *vars):
+            for w in self.watchables:
+                w.add_item(s, expr=expr)
+        return self
 
 _registry: dict[str, deque[Watchable]] = {}
 

@@ -62,7 +62,17 @@
         },
         "pointers": {
           "items": {
-            "$ref": "#/$defs/Pointer2D"
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/$defs/Pointer"
+              },
+              {
+                "$ref": "#/$defs/Pointer"
+              }
+            ],
+            "type": "array"
           },
           "title": "Pointers",
           "type": "array"
@@ -300,46 +310,6 @@
         "notcaptured"
       ],
       "title": "Pointer",
-      "type": "object"
-    },
-    "Pointer2D": {
-      "properties": {
-        "name": {
-          "title": "Name",
-          "type": "string"
-        },
-        "index": {
-          "anyOf": [
-            {
-              "maxItems": 2,
-              "minItems": 2,
-              "prefixItems": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ],
-              "type": "array"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "title": "Index"
-        },
-        "notcaptured": {
-          "title": "Notcaptured",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "name",
-        "index",
-        "notcaptured"
-      ],
-      "title": "Pointer2D",
       "type": "object"
     },
     "VarGraph": {

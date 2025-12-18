@@ -48,11 +48,35 @@
                         <li>
                                 <a class="function" href="#DSWatcherContext.__init__">DSWatcherContext</a>
                         </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#PointableWatcherContext">PointableWatcherContext</a>
+                            <ul class="memberlist">
                         <li>
-                                <a class="function" href="#DSWatcherContext.index">index</a>
+                                <a class="function" href="#PointableWatcherContext.__init__">PointableWatcherContext</a>
                         </li>
                         <li>
-                                <a class="function" href="#DSWatcherContext.item">item</a>
+                                <a class="function" href="#PointableWatcherContext.index">index</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#PointableWatcherContext.item">item</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Pointable2DWatcherContext">Pointable2DWatcherContext</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Pointable2DWatcherContext.__init__">Pointable2DWatcherContext</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Pointable2DWatcherContext.index">index</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Pointable2DWatcherContext.item">item</a>
                         </li>
                 </ul>
 
@@ -92,135 +116,177 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">visual.types.watchable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Watchable</span><span class="p">,</span> <span class="n">DS</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">visual.types.pointable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pointable</span><span class="p">,</span> <span class="n">Pointable2D</span><span class="p">,</span> <span class="n">DS</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">visual.types.watchable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Watchable</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">]:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span> <span class="o">=</span> <span class="n">watchables</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>        <span class="n">unwatch</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">))</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">DS</span><span class="p">](</span><span class="n">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">        Register variables to be used as index pointers for all DS watchables.</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">        </span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">        Args:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">            var (str): The variable name to be used as index pointer.</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">            *vars (str): Additional variable names to be used as index pointers.</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">]:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span> <span class="o">=</span> <span class="n">watchables</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>        <span class="n">unwatch</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">))</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">DS</span><span class="p">](</span><span class="n">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PointableWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Pointable</span><span class="p">](</span><span class="n">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">        Register variables to be used as index pointers for all pointable watchables.</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="sd">        </span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">        Returns:</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">            DSWatcherContext: Returns self to enable method chaining.</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">        Register variables to be used as item pointers for all DS watchables.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">        </span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">        Args:</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">        Args:</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">            var (str): The variable name to be used as index pointer.</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">            *vars (str): Additional variable names to be used as index pointers.</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">        </span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">        Returns:</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">            PointableWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        Register variables to be used as item pointers for all pointable watchables.</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">        </span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">        Returns:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">            DSWatcherContext: Returns self to enable method chaining.</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="n">_registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Watchable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="k">def</span><span class="w"> </span><span class="nf">watch</span><span class="p">(</span><span class="n">watchable</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">):</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    **DO NOT use this function directly. Use `var`, `array`, `nodes` etc. instead.**</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    Registers the watchable to the top of the global watcher registry stack. </span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    </span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">    Since the `watch` system design principle is:     </span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    *Information increment is always better than decrement.*    </span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">    the watchable will be appended to the global watcher registry stack instead of replacing the old one. **If the corresponding variable name didn&#39;t get `unwatch`ed, the last registered watchable with that variable name will be kept.**</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">   </span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    Args:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        watchable (Watchable): The watchable to register.</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        *watchables (Watchable): Additional watchables to register.</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">global</span> <span class="n">_registry</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">(</span><span class="n">watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">):</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="k">def</span><span class="w"> </span><span class="nf">unwatch</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">    **NOT recommended to use this function directly, especially in pure-top-level code. Use `with` statement instead.**</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">    </span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    Unregisters the last registered watchable with that variable name from the global watcher registry stack. </span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">    </span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">    Args:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        var (str): The name of the variable to unregister.</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        *vars (str): Additional variables to unregister.</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">    In some cases like declaring watchable in a function, you can use it via `with` statement:</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">    ```python</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">    def some_func():</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">            x, y = 1, 2</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">            with array(&#39;a&#39;, &#39;b&#39;):</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">                a, b = [1, 2], [3, 4]</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">                ...</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">            # &#39;a&#39;, &#39;b&#39; unwatched implicitly</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">            ...</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        # &#39;x&#39;, &#39;y&#39; unwatched implicitly</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        return</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">    ```</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">    **It will implcitly call `unwatch` when the `with` block is exited.**</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">    `unwatch` will only unregister the watchable that is top of the stack. For example:</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">    ```python</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">    var(&#39;x&#39;, &#39;y&#39;) # Pure top-level watcher. No `unwatch` needed.</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">    def some_func():</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">            x, y = 1, 2</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">            ...</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        # Inner &#39;x&#39;, &#39;y&#39; unwatched implicitly, outer &#39;x&#39;, &#39;y&#39; still watched.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">        return</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">    ```</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="k">global</span> <span class="n">_registry</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>            <span class="k">continue</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>            <span class="k">del</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_registry</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Watchable</span><span class="p">]]:</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">return</span> <span class="n">_registry</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">        Args:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">        </span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">        Returns:</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">            PointableWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Pointable2DWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Pointable2D</span><span class="p">](</span><span class="n">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        Register variables to be used as index pointers for all pointable2d watchables.</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">        </span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        Args:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">            var (tuple[str, str]): The (row, col) tuple variable names to be used as index pointer.</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">            *vars (tuple[str, str]): Additional (row, col) tuple variable names to be used as index pointers.</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        </span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        Returns:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">            Pointable2DWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        Register variables to be used as item pointers for all pointable2d watchables.</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        </span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        Args:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        </span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        Returns:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">            Pointable2DWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="n">_registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Watchable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="k">def</span><span class="w"> </span><span class="nf">watch</span><span class="p">(</span><span class="n">watchable</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">):</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">    **DO NOT use this function directly. Use `var`, `array`, `nodes` etc. instead.**</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">    Registers the watchable to the top of the global watcher registry stack. </span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">    </span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">    Since the `watch` system design principle is:     </span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">    *Information increment is always better than decrement.*    </span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">    the watchable will be appended to the global watcher registry stack instead of replacing the old one. **If the corresponding variable name didn&#39;t get `unwatch`ed, the last registered watchable with that variable name will be kept.**</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">   </span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">    Args:</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        watchable (Watchable): The watchable to register.</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        *watchables (Watchable): Additional watchables to register.</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">global</span> <span class="n">_registry</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">(</span><span class="n">watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">):</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="k">def</span><span class="w"> </span><span class="nf">unwatch</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    **NOT recommended to use this function directly, especially in pure-top-level code. Use `with` statement instead.**</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    </span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">    Unregisters the last registered watchable with that variable name from the global watcher registry stack. </span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">    </span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">    Args:</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        var (str): The name of the variable to unregister.</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        *vars (str): Additional variables to unregister.</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">():</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="k">global</span> <span class="n">_registry</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="n">_registry</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">    In some cases like declaring watchable in a function, you can use it via `with` statement:</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">    ```python</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">    def some_func():</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">            x, y = 1, 2</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">            with array(&#39;a&#39;, &#39;b&#39;):</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">                a, b = [1, 2], [3, 4]</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">                ...</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">            # &#39;a&#39;, &#39;b&#39; unwatched implicitly</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">            ...</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        # &#39;x&#39;, &#39;y&#39; unwatched implicitly</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        return</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">    ```</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">    **It will implcitly call `unwatch` when the `with` block is exited.**</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">    `unwatch` will only unregister the watchable that is top of the stack. For example:</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">    ```python</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    var(&#39;x&#39;, &#39;y&#39;) # Pure top-level watcher. No `unwatch` needed.</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    def some_func():</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">            x, y = 1, 2</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">            ...</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        # Inner &#39;x&#39;, &#39;y&#39; unwatched implicitly, outer &#39;x&#39;, &#39;y&#39; still watched.</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        return</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    ```</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="k">global</span> <span class="n">_registry</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>            <span class="k">continue</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>            <span class="k">del</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_registry</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Watchable</span><span class="p">]]:</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="k">return</span> <span class="n">_registry</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">():</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>    <span class="k">global</span> <span class="n">_registry</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>    <span class="n">_registry</span> <span class="o">=</span> <span class="p">{}</span>
 </span></pre></div>
 
 
@@ -236,15 +302,15 @@
 
     </div>
     <a class="headerlink" href="#WatcherContext"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WatcherContext-7"><a href="#WatcherContext-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">]:</span>
-</span><span id="WatcherContext-8"><a href="#WatcherContext-8"><span class="linenos"> 8</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="WatcherContext-9"><a href="#WatcherContext-9"><span class="linenos"> 9</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span> <span class="o">=</span> <span class="n">watchables</span>
-</span><span id="WatcherContext-10"><a href="#WatcherContext-10"><span class="linenos">10</span></a>
-</span><span id="WatcherContext-11"><a href="#WatcherContext-11"><span class="linenos">11</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="WatcherContext-12"><a href="#WatcherContext-12"><span class="linenos">12</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="WatcherContext-13"><a href="#WatcherContext-13"><span class="linenos">13</span></a>
-</span><span id="WatcherContext-14"><a href="#WatcherContext-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
-</span><span id="WatcherContext-15"><a href="#WatcherContext-15"><span class="linenos">15</span></a>        <span class="n">unwatch</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WatcherContext-8"><a href="#WatcherContext-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">]:</span>
+</span><span id="WatcherContext-9"><a href="#WatcherContext-9"><span class="linenos"> 9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="WatcherContext-10"><a href="#WatcherContext-10"><span class="linenos">10</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span> <span class="o">=</span> <span class="n">watchables</span>
+</span><span id="WatcherContext-11"><a href="#WatcherContext-11"><span class="linenos">11</span></a>
+</span><span id="WatcherContext-12"><a href="#WatcherContext-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="WatcherContext-13"><a href="#WatcherContext-13"><span class="linenos">13</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="WatcherContext-14"><a href="#WatcherContext-14"><span class="linenos">14</span></a>
+</span><span id="WatcherContext-15"><a href="#WatcherContext-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+</span><span id="WatcherContext-16"><a href="#WatcherContext-16"><span class="linenos">16</span></a>        <span class="n">unwatch</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -284,8 +350,8 @@ follows::</p>
 
     </div>
     <a class="headerlink" href="#WatcherContext.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WatcherContext.__init__-8"><a href="#WatcherContext.__init__-8"><span class="linenos">8</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="WatcherContext.__init__-9"><a href="#WatcherContext.__init__-9"><span class="linenos">9</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span> <span class="o">=</span> <span class="n">watchables</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WatcherContext.__init__-9"><a href="#WatcherContext.__init__-9"><span class="linenos"> 9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="WatcherContext.__init__-10"><a href="#WatcherContext.__init__-10"><span class="linenos">10</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span> <span class="o">=</span> <span class="n">watchables</span>
 </span></pre></div>
 
 
@@ -315,43 +381,9 @@ follows::</p>
 
     </div>
     <a class="headerlink" href="#DSWatcherContext"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DSWatcherContext-17"><a href="#DSWatcherContext-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">DS</span><span class="p">](</span><span class="n">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="DSWatcherContext-18"><a href="#DSWatcherContext-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="DSWatcherContext-19"><a href="#DSWatcherContext-19"><span class="linenos">19</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
-</span><span id="DSWatcherContext-20"><a href="#DSWatcherContext-20"><span class="linenos">20</span></a>
-</span><span id="DSWatcherContext-21"><a href="#DSWatcherContext-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-</span><span id="DSWatcherContext-22"><a href="#DSWatcherContext-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext-23"><a href="#DSWatcherContext-23"><span class="linenos">23</span></a><span class="sd">        Register variables to be used as index pointers for all DS watchables.</span>
-</span><span id="DSWatcherContext-24"><a href="#DSWatcherContext-24"><span class="linenos">24</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext-25"><a href="#DSWatcherContext-25"><span class="linenos">25</span></a><span class="sd">        Args:</span>
-</span><span id="DSWatcherContext-26"><a href="#DSWatcherContext-26"><span class="linenos">26</span></a><span class="sd">            var (str): The variable name to be used as index pointer.</span>
-</span><span id="DSWatcherContext-27"><a href="#DSWatcherContext-27"><span class="linenos">27</span></a><span class="sd">            *vars (str): Additional variable names to be used as index pointers.</span>
-</span><span id="DSWatcherContext-28"><a href="#DSWatcherContext-28"><span class="linenos">28</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
-</span><span id="DSWatcherContext-29"><a href="#DSWatcherContext-29"><span class="linenos">29</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext-30"><a href="#DSWatcherContext-30"><span class="linenos">30</span></a><span class="sd">        Returns:</span>
-</span><span id="DSWatcherContext-31"><a href="#DSWatcherContext-31"><span class="linenos">31</span></a><span class="sd">            DSWatcherContext: Returns self to enable method chaining.</span>
-</span><span id="DSWatcherContext-32"><a href="#DSWatcherContext-32"><span class="linenos">32</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext-33"><a href="#DSWatcherContext-33"><span class="linenos">33</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="DSWatcherContext-34"><a href="#DSWatcherContext-34"><span class="linenos">34</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
-</span><span id="DSWatcherContext-35"><a href="#DSWatcherContext-35"><span class="linenos">35</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
-</span><span id="DSWatcherContext-36"><a href="#DSWatcherContext-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="DSWatcherContext-37"><a href="#DSWatcherContext-37"><span class="linenos">37</span></a>
-</span><span id="DSWatcherContext-38"><a href="#DSWatcherContext-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-</span><span id="DSWatcherContext-39"><a href="#DSWatcherContext-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext-40"><a href="#DSWatcherContext-40"><span class="linenos">40</span></a><span class="sd">        Register variables to be used as item pointers for all DS watchables.</span>
-</span><span id="DSWatcherContext-41"><a href="#DSWatcherContext-41"><span class="linenos">41</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext-42"><a href="#DSWatcherContext-42"><span class="linenos">42</span></a><span class="sd">        Args:</span>
-</span><span id="DSWatcherContext-43"><a href="#DSWatcherContext-43"><span class="linenos">43</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
-</span><span id="DSWatcherContext-44"><a href="#DSWatcherContext-44"><span class="linenos">44</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
-</span><span id="DSWatcherContext-45"><a href="#DSWatcherContext-45"><span class="linenos">45</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
-</span><span id="DSWatcherContext-46"><a href="#DSWatcherContext-46"><span class="linenos">46</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext-47"><a href="#DSWatcherContext-47"><span class="linenos">47</span></a><span class="sd">        Returns:</span>
-</span><span id="DSWatcherContext-48"><a href="#DSWatcherContext-48"><span class="linenos">48</span></a><span class="sd">            DSWatcherContext: Returns self to enable method chaining.</span>
-</span><span id="DSWatcherContext-49"><a href="#DSWatcherContext-49"><span class="linenos">49</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext-50"><a href="#DSWatcherContext-50"><span class="linenos">50</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="DSWatcherContext-51"><a href="#DSWatcherContext-51"><span class="linenos">51</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
-</span><span id="DSWatcherContext-52"><a href="#DSWatcherContext-52"><span class="linenos">52</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
-</span><span id="DSWatcherContext-53"><a href="#DSWatcherContext-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DSWatcherContext-18"><a href="#DSWatcherContext-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">DS</span><span class="p">](</span><span class="n">WatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="DSWatcherContext-19"><a href="#DSWatcherContext-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="DSWatcherContext-20"><a href="#DSWatcherContext-20"><span class="linenos">20</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -391,45 +423,150 @@ follows::</p>
 
     </div>
     <a class="headerlink" href="#DSWatcherContext.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DSWatcherContext.__init__-18"><a href="#DSWatcherContext.__init__-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-</span><span id="DSWatcherContext.__init__-19"><a href="#DSWatcherContext.__init__-19"><span class="linenos">19</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DSWatcherContext.__init__-19"><a href="#DSWatcherContext.__init__-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="DSWatcherContext.__init__-20"><a href="#DSWatcherContext.__init__-20"><span class="linenos">20</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="DSWatcherContext.index" class="classattr">
-                                        <input id="DSWatcherContext.index-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#WatcherContext">WatcherContext</a></dt>
+                                <dd id="DSWatcherContext.watchables" class="variable"><a href="#WatcherContext.watchables">watchables</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="PointableWatcherContext">
+                            <input id="PointableWatcherContext-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">PointableWatcherContext</span><wbr>(<span class="base"><a href="#DSWatcherContext">visual.core.watcher.DSWatcherContext[T]</a></span>, <span class="base">typing.Generic[T]</span>):
+
+                <label class="view-source-button" for="PointableWatcherContext-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#PointableWatcherContext"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PointableWatcherContext-22"><a href="#PointableWatcherContext-22"><span class="linenos">22</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PointableWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Pointable</span><span class="p">](</span><span class="n">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="PointableWatcherContext-23"><a href="#PointableWatcherContext-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="PointableWatcherContext-24"><a href="#PointableWatcherContext-24"><span class="linenos">24</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span><span id="PointableWatcherContext-25"><a href="#PointableWatcherContext-25"><span class="linenos">25</span></a>
+</span><span id="PointableWatcherContext-26"><a href="#PointableWatcherContext-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="PointableWatcherContext-27"><a href="#PointableWatcherContext-27"><span class="linenos">27</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext-28"><a href="#PointableWatcherContext-28"><span class="linenos">28</span></a><span class="sd">        Register variables to be used as index pointers for all pointable watchables.</span>
+</span><span id="PointableWatcherContext-29"><a href="#PointableWatcherContext-29"><span class="linenos">29</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext-30"><a href="#PointableWatcherContext-30"><span class="linenos">30</span></a><span class="sd">        Args:</span>
+</span><span id="PointableWatcherContext-31"><a href="#PointableWatcherContext-31"><span class="linenos">31</span></a><span class="sd">            var (str): The variable name to be used as index pointer.</span>
+</span><span id="PointableWatcherContext-32"><a href="#PointableWatcherContext-32"><span class="linenos">32</span></a><span class="sd">            *vars (str): Additional variable names to be used as index pointers.</span>
+</span><span id="PointableWatcherContext-33"><a href="#PointableWatcherContext-33"><span class="linenos">33</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="PointableWatcherContext-34"><a href="#PointableWatcherContext-34"><span class="linenos">34</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext-35"><a href="#PointableWatcherContext-35"><span class="linenos">35</span></a><span class="sd">        Returns:</span>
+</span><span id="PointableWatcherContext-36"><a href="#PointableWatcherContext-36"><span class="linenos">36</span></a><span class="sd">            PointableWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="PointableWatcherContext-37"><a href="#PointableWatcherContext-37"><span class="linenos">37</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext-38"><a href="#PointableWatcherContext-38"><span class="linenos">38</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="PointableWatcherContext-39"><a href="#PointableWatcherContext-39"><span class="linenos">39</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="PointableWatcherContext-40"><a href="#PointableWatcherContext-40"><span class="linenos">40</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="PointableWatcherContext-41"><a href="#PointableWatcherContext-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="PointableWatcherContext-42"><a href="#PointableWatcherContext-42"><span class="linenos">42</span></a>
+</span><span id="PointableWatcherContext-43"><a href="#PointableWatcherContext-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="PointableWatcherContext-44"><a href="#PointableWatcherContext-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext-45"><a href="#PointableWatcherContext-45"><span class="linenos">45</span></a><span class="sd">        Register variables to be used as item pointers for all pointable watchables.</span>
+</span><span id="PointableWatcherContext-46"><a href="#PointableWatcherContext-46"><span class="linenos">46</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext-47"><a href="#PointableWatcherContext-47"><span class="linenos">47</span></a><span class="sd">        Args:</span>
+</span><span id="PointableWatcherContext-48"><a href="#PointableWatcherContext-48"><span class="linenos">48</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
+</span><span id="PointableWatcherContext-49"><a href="#PointableWatcherContext-49"><span class="linenos">49</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
+</span><span id="PointableWatcherContext-50"><a href="#PointableWatcherContext-50"><span class="linenos">50</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="PointableWatcherContext-51"><a href="#PointableWatcherContext-51"><span class="linenos">51</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext-52"><a href="#PointableWatcherContext-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
+</span><span id="PointableWatcherContext-53"><a href="#PointableWatcherContext-53"><span class="linenos">53</span></a><span class="sd">            PointableWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="PointableWatcherContext-54"><a href="#PointableWatcherContext-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext-55"><a href="#PointableWatcherContext-55"><span class="linenos">55</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="PointableWatcherContext-56"><a href="#PointableWatcherContext-56"><span class="linenos">56</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="PointableWatcherContext-57"><a href="#PointableWatcherContext-57"><span class="linenos">57</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="PointableWatcherContext-58"><a href="#PointableWatcherContext-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Abstract base class for generic types.</p>
+
+<p>On Python 3.12 and newer, generic classes implicitly inherit from
+Generic when they declare a parameter list after the class's name::</p>
+
+<pre><code>class Mapping[KT, VT]:
+    def __getitem__(self, key: KT) -&gt; VT:
+        ...
+    # Etc.
+</code></pre>
+
+<p>On older versions of Python, however, generic classes have to
+explicitly inherit from Generic.</p>
+
+<p>After a class has been declared to be generic, it can then be used as
+follows::</p>
+
+<pre><code>def lookup_name[KT, VT](mapping: Mapping[KT, VT], key: KT, default: VT) -&gt; VT:
+    try:
+        return mapping[key]
+    except KeyError:
+        return default
+</code></pre>
+</div>
+
+
+                            <div id="PointableWatcherContext.__init__" class="classattr">
+                                        <input id="PointableWatcherContext.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">PointableWatcherContext</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]</span></span>)</span>
+
+                <label class="view-source-button" for="PointableWatcherContext.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#PointableWatcherContext.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PointableWatcherContext.__init__-23"><a href="#PointableWatcherContext.__init__-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="PointableWatcherContext.__init__-24"><a href="#PointableWatcherContext.__init__-24"><span class="linenos">24</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="PointableWatcherContext.index" class="classattr">
+                                        <input id="PointableWatcherContext.index-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
         <span class="name">index</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">var</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
 
-                <label class="view-source-button" for="DSWatcherContext.index-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PointableWatcherContext.index-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#DSWatcherContext.index"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DSWatcherContext.index-21"><a href="#DSWatcherContext.index-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-</span><span id="DSWatcherContext.index-22"><a href="#DSWatcherContext.index-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext.index-23"><a href="#DSWatcherContext.index-23"><span class="linenos">23</span></a><span class="sd">        Register variables to be used as index pointers for all DS watchables.</span>
-</span><span id="DSWatcherContext.index-24"><a href="#DSWatcherContext.index-24"><span class="linenos">24</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext.index-25"><a href="#DSWatcherContext.index-25"><span class="linenos">25</span></a><span class="sd">        Args:</span>
-</span><span id="DSWatcherContext.index-26"><a href="#DSWatcherContext.index-26"><span class="linenos">26</span></a><span class="sd">            var (str): The variable name to be used as index pointer.</span>
-</span><span id="DSWatcherContext.index-27"><a href="#DSWatcherContext.index-27"><span class="linenos">27</span></a><span class="sd">            *vars (str): Additional variable names to be used as index pointers.</span>
-</span><span id="DSWatcherContext.index-28"><a href="#DSWatcherContext.index-28"><span class="linenos">28</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
-</span><span id="DSWatcherContext.index-29"><a href="#DSWatcherContext.index-29"><span class="linenos">29</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext.index-30"><a href="#DSWatcherContext.index-30"><span class="linenos">30</span></a><span class="sd">        Returns:</span>
-</span><span id="DSWatcherContext.index-31"><a href="#DSWatcherContext.index-31"><span class="linenos">31</span></a><span class="sd">            DSWatcherContext: Returns self to enable method chaining.</span>
-</span><span id="DSWatcherContext.index-32"><a href="#DSWatcherContext.index-32"><span class="linenos">32</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext.index-33"><a href="#DSWatcherContext.index-33"><span class="linenos">33</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="DSWatcherContext.index-34"><a href="#DSWatcherContext.index-34"><span class="linenos">34</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
-</span><span id="DSWatcherContext.index-35"><a href="#DSWatcherContext.index-35"><span class="linenos">35</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
-</span><span id="DSWatcherContext.index-36"><a href="#DSWatcherContext.index-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="bp">self</span>
+    <a class="headerlink" href="#PointableWatcherContext.index"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PointableWatcherContext.index-26"><a href="#PointableWatcherContext.index-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="PointableWatcherContext.index-27"><a href="#PointableWatcherContext.index-27"><span class="linenos">27</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext.index-28"><a href="#PointableWatcherContext.index-28"><span class="linenos">28</span></a><span class="sd">        Register variables to be used as index pointers for all pointable watchables.</span>
+</span><span id="PointableWatcherContext.index-29"><a href="#PointableWatcherContext.index-29"><span class="linenos">29</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext.index-30"><a href="#PointableWatcherContext.index-30"><span class="linenos">30</span></a><span class="sd">        Args:</span>
+</span><span id="PointableWatcherContext.index-31"><a href="#PointableWatcherContext.index-31"><span class="linenos">31</span></a><span class="sd">            var (str): The variable name to be used as index pointer.</span>
+</span><span id="PointableWatcherContext.index-32"><a href="#PointableWatcherContext.index-32"><span class="linenos">32</span></a><span class="sd">            *vars (str): Additional variable names to be used as index pointers.</span>
+</span><span id="PointableWatcherContext.index-33"><a href="#PointableWatcherContext.index-33"><span class="linenos">33</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="PointableWatcherContext.index-34"><a href="#PointableWatcherContext.index-34"><span class="linenos">34</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext.index-35"><a href="#PointableWatcherContext.index-35"><span class="linenos">35</span></a><span class="sd">        Returns:</span>
+</span><span id="PointableWatcherContext.index-36"><a href="#PointableWatcherContext.index-36"><span class="linenos">36</span></a><span class="sd">            PointableWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="PointableWatcherContext.index-37"><a href="#PointableWatcherContext.index-37"><span class="linenos">37</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext.index-38"><a href="#PointableWatcherContext.index-38"><span class="linenos">38</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="PointableWatcherContext.index-39"><a href="#PointableWatcherContext.index-39"><span class="linenos">39</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="PointableWatcherContext.index-40"><a href="#PointableWatcherContext.index-40"><span class="linenos">40</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="PointableWatcherContext.index-41"><a href="#PointableWatcherContext.index-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Register variables to be used as index pointers for all DS watchables.</p>
+            <div class="docstring"><p>Register variables to be used as index pointers for all pointable watchables.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -442,43 +579,43 @@ follows::</p>
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p>DSWatcherContext: Returns self to enable method chaining.</p>
+  <p>PointableWatcherContext: Returns self to enable method chaining.</p>
 </blockquote>
 </div>
 
 
                             </div>
-                            <div id="DSWatcherContext.item" class="classattr">
-                                        <input id="DSWatcherContext.item-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="PointableWatcherContext.item" class="classattr">
+                                        <input id="PointableWatcherContext.item-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
         <span class="name">item</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">var</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
 
-                <label class="view-source-button" for="DSWatcherContext.item-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PointableWatcherContext.item-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#DSWatcherContext.item"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DSWatcherContext.item-38"><a href="#DSWatcherContext.item-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-</span><span id="DSWatcherContext.item-39"><a href="#DSWatcherContext.item-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext.item-40"><a href="#DSWatcherContext.item-40"><span class="linenos">40</span></a><span class="sd">        Register variables to be used as item pointers for all DS watchables.</span>
-</span><span id="DSWatcherContext.item-41"><a href="#DSWatcherContext.item-41"><span class="linenos">41</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext.item-42"><a href="#DSWatcherContext.item-42"><span class="linenos">42</span></a><span class="sd">        Args:</span>
-</span><span id="DSWatcherContext.item-43"><a href="#DSWatcherContext.item-43"><span class="linenos">43</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
-</span><span id="DSWatcherContext.item-44"><a href="#DSWatcherContext.item-44"><span class="linenos">44</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
-</span><span id="DSWatcherContext.item-45"><a href="#DSWatcherContext.item-45"><span class="linenos">45</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
-</span><span id="DSWatcherContext.item-46"><a href="#DSWatcherContext.item-46"><span class="linenos">46</span></a><span class="sd">        </span>
-</span><span id="DSWatcherContext.item-47"><a href="#DSWatcherContext.item-47"><span class="linenos">47</span></a><span class="sd">        Returns:</span>
-</span><span id="DSWatcherContext.item-48"><a href="#DSWatcherContext.item-48"><span class="linenos">48</span></a><span class="sd">            DSWatcherContext: Returns self to enable method chaining.</span>
-</span><span id="DSWatcherContext.item-49"><a href="#DSWatcherContext.item-49"><span class="linenos">49</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DSWatcherContext.item-50"><a href="#DSWatcherContext.item-50"><span class="linenos">50</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="DSWatcherContext.item-51"><a href="#DSWatcherContext.item-51"><span class="linenos">51</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
-</span><span id="DSWatcherContext.item-52"><a href="#DSWatcherContext.item-52"><span class="linenos">52</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
-</span><span id="DSWatcherContext.item-53"><a href="#DSWatcherContext.item-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="bp">self</span>
+    <a class="headerlink" href="#PointableWatcherContext.item"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PointableWatcherContext.item-43"><a href="#PointableWatcherContext.item-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="PointableWatcherContext.item-44"><a href="#PointableWatcherContext.item-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext.item-45"><a href="#PointableWatcherContext.item-45"><span class="linenos">45</span></a><span class="sd">        Register variables to be used as item pointers for all pointable watchables.</span>
+</span><span id="PointableWatcherContext.item-46"><a href="#PointableWatcherContext.item-46"><span class="linenos">46</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext.item-47"><a href="#PointableWatcherContext.item-47"><span class="linenos">47</span></a><span class="sd">        Args:</span>
+</span><span id="PointableWatcherContext.item-48"><a href="#PointableWatcherContext.item-48"><span class="linenos">48</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
+</span><span id="PointableWatcherContext.item-49"><a href="#PointableWatcherContext.item-49"><span class="linenos">49</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
+</span><span id="PointableWatcherContext.item-50"><a href="#PointableWatcherContext.item-50"><span class="linenos">50</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="PointableWatcherContext.item-51"><a href="#PointableWatcherContext.item-51"><span class="linenos">51</span></a><span class="sd">        </span>
+</span><span id="PointableWatcherContext.item-52"><a href="#PointableWatcherContext.item-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
+</span><span id="PointableWatcherContext.item-53"><a href="#PointableWatcherContext.item-53"><span class="linenos">53</span></a><span class="sd">            PointableWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="PointableWatcherContext.item-54"><a href="#PointableWatcherContext.item-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PointableWatcherContext.item-55"><a href="#PointableWatcherContext.item-55"><span class="linenos">55</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="PointableWatcherContext.item-56"><a href="#PointableWatcherContext.item-56"><span class="linenos">56</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="PointableWatcherContext.item-57"><a href="#PointableWatcherContext.item-57"><span class="linenos">57</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="PointableWatcherContext.item-58"><a href="#PointableWatcherContext.item-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Register variables to be used as item pointers for all DS watchables.</p>
+            <div class="docstring"><p>Register variables to be used as item pointers for all pointable watchables.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -491,7 +628,7 @@ follows::</p>
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p>DSWatcherContext: Returns self to enable method chaining.</p>
+  <p>PointableWatcherContext: Returns self to enable method chaining.</p>
 </blockquote>
 </div>
 
@@ -501,7 +638,210 @@ follows::</p>
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="#WatcherContext">WatcherContext</a></dt>
-                                <dd id="DSWatcherContext.watchables" class="variable"><a href="#WatcherContext.watchables">watchables</a></dd>
+                                <dd id="PointableWatcherContext.watchables" class="variable"><a href="#WatcherContext.watchables">watchables</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="Pointable2DWatcherContext">
+                            <input id="Pointable2DWatcherContext-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">Pointable2DWatcherContext</span><wbr>(<span class="base"><a href="#DSWatcherContext">visual.core.watcher.DSWatcherContext[T]</a></span>, <span class="base">typing.Generic[T]</span>):
+
+                <label class="view-source-button" for="Pointable2DWatcherContext-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Pointable2DWatcherContext"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Pointable2DWatcherContext-60"><a href="#Pointable2DWatcherContext-60"><span class="linenos">60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Pointable2DWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="n">Pointable2D</span><span class="p">](</span><span class="n">DSWatcherContext</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="Pointable2DWatcherContext-61"><a href="#Pointable2DWatcherContext-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="Pointable2DWatcherContext-62"><a href="#Pointable2DWatcherContext-62"><span class="linenos">62</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span><span id="Pointable2DWatcherContext-63"><a href="#Pointable2DWatcherContext-63"><span class="linenos">63</span></a>
+</span><span id="Pointable2DWatcherContext-64"><a href="#Pointable2DWatcherContext-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext-65"><a href="#Pointable2DWatcherContext-65"><span class="linenos">65</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext-66"><a href="#Pointable2DWatcherContext-66"><span class="linenos">66</span></a><span class="sd">        Register variables to be used as index pointers for all pointable2d watchables.</span>
+</span><span id="Pointable2DWatcherContext-67"><a href="#Pointable2DWatcherContext-67"><span class="linenos">67</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext-68"><a href="#Pointable2DWatcherContext-68"><span class="linenos">68</span></a><span class="sd">        Args:</span>
+</span><span id="Pointable2DWatcherContext-69"><a href="#Pointable2DWatcherContext-69"><span class="linenos">69</span></a><span class="sd">            var (tuple[str, str]): The (row, col) tuple variable names to be used as index pointer.</span>
+</span><span id="Pointable2DWatcherContext-70"><a href="#Pointable2DWatcherContext-70"><span class="linenos">70</span></a><span class="sd">            *vars (tuple[str, str]): Additional (row, col) tuple variable names to be used as index pointers.</span>
+</span><span id="Pointable2DWatcherContext-71"><a href="#Pointable2DWatcherContext-71"><span class="linenos">71</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="Pointable2DWatcherContext-72"><a href="#Pointable2DWatcherContext-72"><span class="linenos">72</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext-73"><a href="#Pointable2DWatcherContext-73"><span class="linenos">73</span></a><span class="sd">        Returns:</span>
+</span><span id="Pointable2DWatcherContext-74"><a href="#Pointable2DWatcherContext-74"><span class="linenos">74</span></a><span class="sd">            Pointable2DWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="Pointable2DWatcherContext-75"><a href="#Pointable2DWatcherContext-75"><span class="linenos">75</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext-76"><a href="#Pointable2DWatcherContext-76"><span class="linenos">76</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext-77"><a href="#Pointable2DWatcherContext-77"><span class="linenos">77</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="Pointable2DWatcherContext-78"><a href="#Pointable2DWatcherContext-78"><span class="linenos">78</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="Pointable2DWatcherContext-79"><a href="#Pointable2DWatcherContext-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Pointable2DWatcherContext-80"><a href="#Pointable2DWatcherContext-80"><span class="linenos">80</span></a>
+</span><span id="Pointable2DWatcherContext-81"><a href="#Pointable2DWatcherContext-81"><span class="linenos">81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext-82"><a href="#Pointable2DWatcherContext-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext-83"><a href="#Pointable2DWatcherContext-83"><span class="linenos">83</span></a><span class="sd">        Register variables to be used as item pointers for all pointable2d watchables.</span>
+</span><span id="Pointable2DWatcherContext-84"><a href="#Pointable2DWatcherContext-84"><span class="linenos">84</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext-85"><a href="#Pointable2DWatcherContext-85"><span class="linenos">85</span></a><span class="sd">        Args:</span>
+</span><span id="Pointable2DWatcherContext-86"><a href="#Pointable2DWatcherContext-86"><span class="linenos">86</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
+</span><span id="Pointable2DWatcherContext-87"><a href="#Pointable2DWatcherContext-87"><span class="linenos">87</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
+</span><span id="Pointable2DWatcherContext-88"><a href="#Pointable2DWatcherContext-88"><span class="linenos">88</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="Pointable2DWatcherContext-89"><a href="#Pointable2DWatcherContext-89"><span class="linenos">89</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext-90"><a href="#Pointable2DWatcherContext-90"><span class="linenos">90</span></a><span class="sd">        Returns:</span>
+</span><span id="Pointable2DWatcherContext-91"><a href="#Pointable2DWatcherContext-91"><span class="linenos">91</span></a><span class="sd">            Pointable2DWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="Pointable2DWatcherContext-92"><a href="#Pointable2DWatcherContext-92"><span class="linenos">92</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext-93"><a href="#Pointable2DWatcherContext-93"><span class="linenos">93</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext-94"><a href="#Pointable2DWatcherContext-94"><span class="linenos">94</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="Pointable2DWatcherContext-95"><a href="#Pointable2DWatcherContext-95"><span class="linenos">95</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="Pointable2DWatcherContext-96"><a href="#Pointable2DWatcherContext-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Abstract base class for generic types.</p>
+
+<p>On Python 3.12 and newer, generic classes implicitly inherit from
+Generic when they declare a parameter list after the class's name::</p>
+
+<pre><code>class Mapping[KT, VT]:
+    def __getitem__(self, key: KT) -&gt; VT:
+        ...
+    # Etc.
+</code></pre>
+
+<p>On older versions of Python, however, generic classes have to
+explicitly inherit from Generic.</p>
+
+<p>After a class has been declared to be generic, it can then be used as
+follows::</p>
+
+<pre><code>def lookup_name[KT, VT](mapping: Mapping[KT, VT], key: KT, default: VT) -&gt; VT:
+    try:
+        return mapping[key]
+    except KeyError:
+        return default
+</code></pre>
+</div>
+
+
+                            <div id="Pointable2DWatcherContext.__init__" class="classattr">
+                                        <input id="Pointable2DWatcherContext.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">Pointable2DWatcherContext</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]</span></span>)</span>
+
+                <label class="view-source-button" for="Pointable2DWatcherContext.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Pointable2DWatcherContext.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Pointable2DWatcherContext.__init__-61"><a href="#Pointable2DWatcherContext.__init__-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watchables</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="Pointable2DWatcherContext.__init__-62"><a href="#Pointable2DWatcherContext.__init__-62"><span class="linenos">62</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">watchables</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Pointable2DWatcherContext.index" class="classattr">
+                                        <input id="Pointable2DWatcherContext.index-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">index</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="Pointable2DWatcherContext.index-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Pointable2DWatcherContext.index"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Pointable2DWatcherContext.index-64"><a href="#Pointable2DWatcherContext.index-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext.index-65"><a href="#Pointable2DWatcherContext.index-65"><span class="linenos">65</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext.index-66"><a href="#Pointable2DWatcherContext.index-66"><span class="linenos">66</span></a><span class="sd">        Register variables to be used as index pointers for all pointable2d watchables.</span>
+</span><span id="Pointable2DWatcherContext.index-67"><a href="#Pointable2DWatcherContext.index-67"><span class="linenos">67</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext.index-68"><a href="#Pointable2DWatcherContext.index-68"><span class="linenos">68</span></a><span class="sd">        Args:</span>
+</span><span id="Pointable2DWatcherContext.index-69"><a href="#Pointable2DWatcherContext.index-69"><span class="linenos">69</span></a><span class="sd">            var (tuple[str, str]): The (row, col) tuple variable names to be used as index pointer.</span>
+</span><span id="Pointable2DWatcherContext.index-70"><a href="#Pointable2DWatcherContext.index-70"><span class="linenos">70</span></a><span class="sd">            *vars (tuple[str, str]): Additional (row, col) tuple variable names to be used as index pointers.</span>
+</span><span id="Pointable2DWatcherContext.index-71"><a href="#Pointable2DWatcherContext.index-71"><span class="linenos">71</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="Pointable2DWatcherContext.index-72"><a href="#Pointable2DWatcherContext.index-72"><span class="linenos">72</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext.index-73"><a href="#Pointable2DWatcherContext.index-73"><span class="linenos">73</span></a><span class="sd">        Returns:</span>
+</span><span id="Pointable2DWatcherContext.index-74"><a href="#Pointable2DWatcherContext.index-74"><span class="linenos">74</span></a><span class="sd">            Pointable2DWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="Pointable2DWatcherContext.index-75"><a href="#Pointable2DWatcherContext.index-75"><span class="linenos">75</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext.index-76"><a href="#Pointable2DWatcherContext.index-76"><span class="linenos">76</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext.index-77"><a href="#Pointable2DWatcherContext.index-77"><span class="linenos">77</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="Pointable2DWatcherContext.index-78"><a href="#Pointable2DWatcherContext.index-78"><span class="linenos">78</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_index</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="Pointable2DWatcherContext.index-79"><a href="#Pointable2DWatcherContext.index-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Register variables to be used as index pointers for all pointable2d watchables.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>var (tuple[str, str]):</strong>  The (row, col) tuple variable names to be used as index pointer.</li>
+<li><strong>*vars (tuple[str, str]):</strong>  Additional (row, col) tuple variable names to be used as index pointers.</li>
+<li><strong>expr (bool):</strong>  Whether the <code>var</code> and <code>*vars</code> are actually expressions.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>Pointable2DWatcherContext: Returns self to enable method chaining.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="Pointable2DWatcherContext.item" class="classattr">
+                                        <input id="Pointable2DWatcherContext.item-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">item</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">var</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="Pointable2DWatcherContext.item-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Pointable2DWatcherContext.item"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Pointable2DWatcherContext.item-81"><a href="#Pointable2DWatcherContext.item-81"><span class="linenos">81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext.item-82"><a href="#Pointable2DWatcherContext.item-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext.item-83"><a href="#Pointable2DWatcherContext.item-83"><span class="linenos">83</span></a><span class="sd">        Register variables to be used as item pointers for all pointable2d watchables.</span>
+</span><span id="Pointable2DWatcherContext.item-84"><a href="#Pointable2DWatcherContext.item-84"><span class="linenos">84</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext.item-85"><a href="#Pointable2DWatcherContext.item-85"><span class="linenos">85</span></a><span class="sd">        Args:</span>
+</span><span id="Pointable2DWatcherContext.item-86"><a href="#Pointable2DWatcherContext.item-86"><span class="linenos">86</span></a><span class="sd">            var (str): The variable name to be used as item pointer.</span>
+</span><span id="Pointable2DWatcherContext.item-87"><a href="#Pointable2DWatcherContext.item-87"><span class="linenos">87</span></a><span class="sd">            *vars (str): Additional variable names to be used as item pointers.</span>
+</span><span id="Pointable2DWatcherContext.item-88"><a href="#Pointable2DWatcherContext.item-88"><span class="linenos">88</span></a><span class="sd">            expr (bool): Whether the `var` and `*vars` are actually expressions.</span>
+</span><span id="Pointable2DWatcherContext.item-89"><a href="#Pointable2DWatcherContext.item-89"><span class="linenos">89</span></a><span class="sd">        </span>
+</span><span id="Pointable2DWatcherContext.item-90"><a href="#Pointable2DWatcherContext.item-90"><span class="linenos">90</span></a><span class="sd">        Returns:</span>
+</span><span id="Pointable2DWatcherContext.item-91"><a href="#Pointable2DWatcherContext.item-91"><span class="linenos">91</span></a><span class="sd">            Pointable2DWatcherContext: Returns self to enable method chaining.</span>
+</span><span id="Pointable2DWatcherContext.item-92"><a href="#Pointable2DWatcherContext.item-92"><span class="linenos">92</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Pointable2DWatcherContext.item-93"><a href="#Pointable2DWatcherContext.item-93"><span class="linenos">93</span></a>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="Pointable2DWatcherContext.item-94"><a href="#Pointable2DWatcherContext.item-94"><span class="linenos">94</span></a>            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchables</span><span class="p">:</span>
+</span><span id="Pointable2DWatcherContext.item-95"><a href="#Pointable2DWatcherContext.item-95"><span class="linenos">95</span></a>                <span class="n">w</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="n">expr</span><span class="p">)</span>
+</span><span id="Pointable2DWatcherContext.item-96"><a href="#Pointable2DWatcherContext.item-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Register variables to be used as item pointers for all pointable2d watchables.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>var (str):</strong>  The variable name to be used as item pointer.</li>
+<li><strong>*vars (str):</strong>  Additional variable names to be used as item pointers.</li>
+<li><strong>expr (bool):</strong>  Whether the <code>var</code> and <code>*vars</code> are actually expressions.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>Pointable2DWatcherContext: Returns self to enable method chaining.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#WatcherContext">WatcherContext</a></dt>
+                                <dd id="Pointable2DWatcherContext.watchables" class="variable"><a href="#WatcherContext.watchables">watchables</a></dd>
 
             </div>
                                 </dl>
@@ -518,25 +858,25 @@ follows::</p>
 
     </div>
     <a class="headerlink" href="#watch"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="watch-58"><a href="#watch-58"><span class="linenos">58</span></a><span class="k">def</span><span class="w"> </span><span class="nf">watch</span><span class="p">(</span><span class="n">watchable</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">):</span>
-</span><span id="watch-59"><a href="#watch-59"><span class="linenos">59</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="watch-60"><a href="#watch-60"><span class="linenos">60</span></a><span class="sd">    **DO NOT use this function directly. Use `var`, `array`, `nodes` etc. instead.**</span>
-</span><span id="watch-61"><a href="#watch-61"><span class="linenos">61</span></a>
-</span><span id="watch-62"><a href="#watch-62"><span class="linenos">62</span></a><span class="sd">    Registers the watchable to the top of the global watcher registry stack. </span>
-</span><span id="watch-63"><a href="#watch-63"><span class="linenos">63</span></a><span class="sd">    </span>
-</span><span id="watch-64"><a href="#watch-64"><span class="linenos">64</span></a><span class="sd">    Since the `watch` system design principle is:     </span>
-</span><span id="watch-65"><a href="#watch-65"><span class="linenos">65</span></a><span class="sd">    *Information increment is always better than decrement.*    </span>
-</span><span id="watch-66"><a href="#watch-66"><span class="linenos">66</span></a><span class="sd">    the watchable will be appended to the global watcher registry stack instead of replacing the old one. **If the corresponding variable name didn&#39;t get `unwatch`ed, the last registered watchable with that variable name will be kept.**</span>
-</span><span id="watch-67"><a href="#watch-67"><span class="linenos">67</span></a><span class="sd">   </span>
-</span><span id="watch-68"><a href="#watch-68"><span class="linenos">68</span></a><span class="sd">    Args:</span>
-</span><span id="watch-69"><a href="#watch-69"><span class="linenos">69</span></a><span class="sd">        watchable (Watchable): The watchable to register.</span>
-</span><span id="watch-70"><a href="#watch-70"><span class="linenos">70</span></a><span class="sd">        *watchables (Watchable): Additional watchables to register.</span>
-</span><span id="watch-71"><a href="#watch-71"><span class="linenos">71</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="watch-72"><a href="#watch-72"><span class="linenos">72</span></a>    <span class="k">global</span> <span class="n">_registry</span>
-</span><span id="watch-73"><a href="#watch-73"><span class="linenos">73</span></a>    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">(</span><span class="n">watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">):</span>
-</span><span id="watch-74"><a href="#watch-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="watch-75"><a href="#watch-75"><span class="linenos">75</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
-</span><span id="watch-76"><a href="#watch-76"><span class="linenos">76</span></a>        <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="watch-100"><a href="#watch-100"><span class="linenos">100</span></a><span class="k">def</span><span class="w"> </span><span class="nf">watch</span><span class="p">(</span><span class="n">watchable</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">:</span> <span class="n">Watchable</span><span class="p">):</span>
+</span><span id="watch-101"><a href="#watch-101"><span class="linenos">101</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="watch-102"><a href="#watch-102"><span class="linenos">102</span></a><span class="sd">    **DO NOT use this function directly. Use `var`, `array`, `nodes` etc. instead.**</span>
+</span><span id="watch-103"><a href="#watch-103"><span class="linenos">103</span></a>
+</span><span id="watch-104"><a href="#watch-104"><span class="linenos">104</span></a><span class="sd">    Registers the watchable to the top of the global watcher registry stack. </span>
+</span><span id="watch-105"><a href="#watch-105"><span class="linenos">105</span></a><span class="sd">    </span>
+</span><span id="watch-106"><a href="#watch-106"><span class="linenos">106</span></a><span class="sd">    Since the `watch` system design principle is:     </span>
+</span><span id="watch-107"><a href="#watch-107"><span class="linenos">107</span></a><span class="sd">    *Information increment is always better than decrement.*    </span>
+</span><span id="watch-108"><a href="#watch-108"><span class="linenos">108</span></a><span class="sd">    the watchable will be appended to the global watcher registry stack instead of replacing the old one. **If the corresponding variable name didn&#39;t get `unwatch`ed, the last registered watchable with that variable name will be kept.**</span>
+</span><span id="watch-109"><a href="#watch-109"><span class="linenos">109</span></a><span class="sd">   </span>
+</span><span id="watch-110"><a href="#watch-110"><span class="linenos">110</span></a><span class="sd">    Args:</span>
+</span><span id="watch-111"><a href="#watch-111"><span class="linenos">111</span></a><span class="sd">        watchable (Watchable): The watchable to register.</span>
+</span><span id="watch-112"><a href="#watch-112"><span class="linenos">112</span></a><span class="sd">        *watchables (Watchable): Additional watchables to register.</span>
+</span><span id="watch-113"><a href="#watch-113"><span class="linenos">113</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="watch-114"><a href="#watch-114"><span class="linenos">114</span></a>    <span class="k">global</span> <span class="n">_registry</span>
+</span><span id="watch-115"><a href="#watch-115"><span class="linenos">115</span></a>    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">(</span><span class="n">watchable</span><span class="p">,</span> <span class="o">*</span><span class="n">watchables</span><span class="p">):</span>
+</span><span id="watch-116"><a href="#watch-116"><span class="linenos">116</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="watch-117"><a href="#watch-117"><span class="linenos">117</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+</span><span id="watch-118"><a href="#watch-118"><span class="linenos">118</span></a>        <span class="n">_registry</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">varname</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -569,54 +909,54 @@ the watchable will be appended to the global watcher registry stack instead of r
 
     </div>
     <a class="headerlink" href="#unwatch"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="unwatch-78"><a href="#unwatch-78"><span class="linenos"> 78</span></a><span class="k">def</span><span class="w"> </span><span class="nf">unwatch</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="unwatch-79"><a href="#unwatch-79"><span class="linenos"> 79</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="unwatch-80"><a href="#unwatch-80"><span class="linenos"> 80</span></a><span class="sd">    **NOT recommended to use this function directly, especially in pure-top-level code. Use `with` statement instead.**</span>
-</span><span id="unwatch-81"><a href="#unwatch-81"><span class="linenos"> 81</span></a><span class="sd">    </span>
-</span><span id="unwatch-82"><a href="#unwatch-82"><span class="linenos"> 82</span></a><span class="sd">    Unregisters the last registered watchable with that variable name from the global watcher registry stack. </span>
-</span><span id="unwatch-83"><a href="#unwatch-83"><span class="linenos"> 83</span></a><span class="sd">    </span>
-</span><span id="unwatch-84"><a href="#unwatch-84"><span class="linenos"> 84</span></a><span class="sd">    Args:</span>
-</span><span id="unwatch-85"><a href="#unwatch-85"><span class="linenos"> 85</span></a><span class="sd">        var (str): The name of the variable to unregister.</span>
-</span><span id="unwatch-86"><a href="#unwatch-86"><span class="linenos"> 86</span></a><span class="sd">        *vars (str): Additional variables to unregister.</span>
-</span><span id="unwatch-87"><a href="#unwatch-87"><span class="linenos"> 87</span></a>
-</span><span id="unwatch-88"><a href="#unwatch-88"><span class="linenos"> 88</span></a><span class="sd">    In some cases like declaring watchable in a function, you can use it via `with` statement:</span>
-</span><span id="unwatch-89"><a href="#unwatch-89"><span class="linenos"> 89</span></a>
-</span><span id="unwatch-90"><a href="#unwatch-90"><span class="linenos"> 90</span></a><span class="sd">    ```python</span>
-</span><span id="unwatch-91"><a href="#unwatch-91"><span class="linenos"> 91</span></a><span class="sd">    def some_func():</span>
-</span><span id="unwatch-92"><a href="#unwatch-92"><span class="linenos"> 92</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
-</span><span id="unwatch-93"><a href="#unwatch-93"><span class="linenos"> 93</span></a><span class="sd">            x, y = 1, 2</span>
-</span><span id="unwatch-94"><a href="#unwatch-94"><span class="linenos"> 94</span></a><span class="sd">            with array(&#39;a&#39;, &#39;b&#39;):</span>
-</span><span id="unwatch-95"><a href="#unwatch-95"><span class="linenos"> 95</span></a><span class="sd">                a, b = [1, 2], [3, 4]</span>
-</span><span id="unwatch-96"><a href="#unwatch-96"><span class="linenos"> 96</span></a><span class="sd">                ...</span>
-</span><span id="unwatch-97"><a href="#unwatch-97"><span class="linenos"> 97</span></a><span class="sd">            # &#39;a&#39;, &#39;b&#39; unwatched implicitly</span>
-</span><span id="unwatch-98"><a href="#unwatch-98"><span class="linenos"> 98</span></a><span class="sd">            ...</span>
-</span><span id="unwatch-99"><a href="#unwatch-99"><span class="linenos"> 99</span></a><span class="sd">        # &#39;x&#39;, &#39;y&#39; unwatched implicitly</span>
-</span><span id="unwatch-100"><a href="#unwatch-100"><span class="linenos">100</span></a><span class="sd">        return</span>
-</span><span id="unwatch-101"><a href="#unwatch-101"><span class="linenos">101</span></a><span class="sd">    ```</span>
-</span><span id="unwatch-102"><a href="#unwatch-102"><span class="linenos">102</span></a>
-</span><span id="unwatch-103"><a href="#unwatch-103"><span class="linenos">103</span></a><span class="sd">    **It will implcitly call `unwatch` when the `with` block is exited.**</span>
-</span><span id="unwatch-104"><a href="#unwatch-104"><span class="linenos">104</span></a>
-</span><span id="unwatch-105"><a href="#unwatch-105"><span class="linenos">105</span></a><span class="sd">    `unwatch` will only unregister the watchable that is top of the stack. For example:</span>
-</span><span id="unwatch-106"><a href="#unwatch-106"><span class="linenos">106</span></a>
-</span><span id="unwatch-107"><a href="#unwatch-107"><span class="linenos">107</span></a><span class="sd">    ```python</span>
-</span><span id="unwatch-108"><a href="#unwatch-108"><span class="linenos">108</span></a><span class="sd">    var(&#39;x&#39;, &#39;y&#39;) # Pure top-level watcher. No `unwatch` needed.</span>
-</span><span id="unwatch-109"><a href="#unwatch-109"><span class="linenos">109</span></a>
-</span><span id="unwatch-110"><a href="#unwatch-110"><span class="linenos">110</span></a><span class="sd">    def some_func():</span>
-</span><span id="unwatch-111"><a href="#unwatch-111"><span class="linenos">111</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
-</span><span id="unwatch-112"><a href="#unwatch-112"><span class="linenos">112</span></a><span class="sd">            x, y = 1, 2</span>
-</span><span id="unwatch-113"><a href="#unwatch-113"><span class="linenos">113</span></a><span class="sd">            ...</span>
-</span><span id="unwatch-114"><a href="#unwatch-114"><span class="linenos">114</span></a><span class="sd">        # Inner &#39;x&#39;, &#39;y&#39; unwatched implicitly, outer &#39;x&#39;, &#39;y&#39; still watched.</span>
-</span><span id="unwatch-115"><a href="#unwatch-115"><span class="linenos">115</span></a><span class="sd">        return</span>
-</span><span id="unwatch-116"><a href="#unwatch-116"><span class="linenos">116</span></a><span class="sd">    ```</span>
-</span><span id="unwatch-117"><a href="#unwatch-117"><span class="linenos">117</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="unwatch-118"><a href="#unwatch-118"><span class="linenos">118</span></a>    <span class="k">global</span> <span class="n">_registry</span>
-</span><span id="unwatch-119"><a href="#unwatch-119"><span class="linenos">119</span></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
-</span><span id="unwatch-120"><a href="#unwatch-120"><span class="linenos">120</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="unwatch-121"><a href="#unwatch-121"><span class="linenos">121</span></a>            <span class="k">continue</span>
-</span><span id="unwatch-122"><a href="#unwatch-122"><span class="linenos">122</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
-</span><span id="unwatch-123"><a href="#unwatch-123"><span class="linenos">123</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-</span><span id="unwatch-124"><a href="#unwatch-124"><span class="linenos">124</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
-</span><span id="unwatch-125"><a href="#unwatch-125"><span class="linenos">125</span></a>            <span class="k">del</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="unwatch-120"><a href="#unwatch-120"><span class="linenos">120</span></a><span class="k">def</span><span class="w"> </span><span class="nf">unwatch</span><span class="p">(</span><span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="unwatch-121"><a href="#unwatch-121"><span class="linenos">121</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="unwatch-122"><a href="#unwatch-122"><span class="linenos">122</span></a><span class="sd">    **NOT recommended to use this function directly, especially in pure-top-level code. Use `with` statement instead.**</span>
+</span><span id="unwatch-123"><a href="#unwatch-123"><span class="linenos">123</span></a><span class="sd">    </span>
+</span><span id="unwatch-124"><a href="#unwatch-124"><span class="linenos">124</span></a><span class="sd">    Unregisters the last registered watchable with that variable name from the global watcher registry stack. </span>
+</span><span id="unwatch-125"><a href="#unwatch-125"><span class="linenos">125</span></a><span class="sd">    </span>
+</span><span id="unwatch-126"><a href="#unwatch-126"><span class="linenos">126</span></a><span class="sd">    Args:</span>
+</span><span id="unwatch-127"><a href="#unwatch-127"><span class="linenos">127</span></a><span class="sd">        var (str): The name of the variable to unregister.</span>
+</span><span id="unwatch-128"><a href="#unwatch-128"><span class="linenos">128</span></a><span class="sd">        *vars (str): Additional variables to unregister.</span>
+</span><span id="unwatch-129"><a href="#unwatch-129"><span class="linenos">129</span></a>
+</span><span id="unwatch-130"><a href="#unwatch-130"><span class="linenos">130</span></a><span class="sd">    In some cases like declaring watchable in a function, you can use it via `with` statement:</span>
+</span><span id="unwatch-131"><a href="#unwatch-131"><span class="linenos">131</span></a>
+</span><span id="unwatch-132"><a href="#unwatch-132"><span class="linenos">132</span></a><span class="sd">    ```python</span>
+</span><span id="unwatch-133"><a href="#unwatch-133"><span class="linenos">133</span></a><span class="sd">    def some_func():</span>
+</span><span id="unwatch-134"><a href="#unwatch-134"><span class="linenos">134</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
+</span><span id="unwatch-135"><a href="#unwatch-135"><span class="linenos">135</span></a><span class="sd">            x, y = 1, 2</span>
+</span><span id="unwatch-136"><a href="#unwatch-136"><span class="linenos">136</span></a><span class="sd">            with array(&#39;a&#39;, &#39;b&#39;):</span>
+</span><span id="unwatch-137"><a href="#unwatch-137"><span class="linenos">137</span></a><span class="sd">                a, b = [1, 2], [3, 4]</span>
+</span><span id="unwatch-138"><a href="#unwatch-138"><span class="linenos">138</span></a><span class="sd">                ...</span>
+</span><span id="unwatch-139"><a href="#unwatch-139"><span class="linenos">139</span></a><span class="sd">            # &#39;a&#39;, &#39;b&#39; unwatched implicitly</span>
+</span><span id="unwatch-140"><a href="#unwatch-140"><span class="linenos">140</span></a><span class="sd">            ...</span>
+</span><span id="unwatch-141"><a href="#unwatch-141"><span class="linenos">141</span></a><span class="sd">        # &#39;x&#39;, &#39;y&#39; unwatched implicitly</span>
+</span><span id="unwatch-142"><a href="#unwatch-142"><span class="linenos">142</span></a><span class="sd">        return</span>
+</span><span id="unwatch-143"><a href="#unwatch-143"><span class="linenos">143</span></a><span class="sd">    ```</span>
+</span><span id="unwatch-144"><a href="#unwatch-144"><span class="linenos">144</span></a>
+</span><span id="unwatch-145"><a href="#unwatch-145"><span class="linenos">145</span></a><span class="sd">    **It will implcitly call `unwatch` when the `with` block is exited.**</span>
+</span><span id="unwatch-146"><a href="#unwatch-146"><span class="linenos">146</span></a>
+</span><span id="unwatch-147"><a href="#unwatch-147"><span class="linenos">147</span></a><span class="sd">    `unwatch` will only unregister the watchable that is top of the stack. For example:</span>
+</span><span id="unwatch-148"><a href="#unwatch-148"><span class="linenos">148</span></a>
+</span><span id="unwatch-149"><a href="#unwatch-149"><span class="linenos">149</span></a><span class="sd">    ```python</span>
+</span><span id="unwatch-150"><a href="#unwatch-150"><span class="linenos">150</span></a><span class="sd">    var(&#39;x&#39;, &#39;y&#39;) # Pure top-level watcher. No `unwatch` needed.</span>
+</span><span id="unwatch-151"><a href="#unwatch-151"><span class="linenos">151</span></a>
+</span><span id="unwatch-152"><a href="#unwatch-152"><span class="linenos">152</span></a><span class="sd">    def some_func():</span>
+</span><span id="unwatch-153"><a href="#unwatch-153"><span class="linenos">153</span></a><span class="sd">        with var(&#39;x&#39;, &#39;y&#39;):</span>
+</span><span id="unwatch-154"><a href="#unwatch-154"><span class="linenos">154</span></a><span class="sd">            x, y = 1, 2</span>
+</span><span id="unwatch-155"><a href="#unwatch-155"><span class="linenos">155</span></a><span class="sd">            ...</span>
+</span><span id="unwatch-156"><a href="#unwatch-156"><span class="linenos">156</span></a><span class="sd">        # Inner &#39;x&#39;, &#39;y&#39; unwatched implicitly, outer &#39;x&#39;, &#39;y&#39; still watched.</span>
+</span><span id="unwatch-157"><a href="#unwatch-157"><span class="linenos">157</span></a><span class="sd">        return</span>
+</span><span id="unwatch-158"><a href="#unwatch-158"><span class="linenos">158</span></a><span class="sd">    ```</span>
+</span><span id="unwatch-159"><a href="#unwatch-159"><span class="linenos">159</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="unwatch-160"><a href="#unwatch-160"><span class="linenos">160</span></a>    <span class="k">global</span> <span class="n">_registry</span>
+</span><span id="unwatch-161"><a href="#unwatch-161"><span class="linenos">161</span></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="nb">vars</span><span class="p">):</span>
+</span><span id="unwatch-162"><a href="#unwatch-162"><span class="linenos">162</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="unwatch-163"><a href="#unwatch-163"><span class="linenos">163</span></a>            <span class="k">continue</span>
+</span><span id="unwatch-164"><a href="#unwatch-164"><span class="linenos">164</span></a>        <span class="k">if</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+</span><span id="unwatch-165"><a href="#unwatch-165"><span class="linenos">165</span></a>            <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</span><span id="unwatch-166"><a href="#unwatch-166"><span class="linenos">166</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+</span><span id="unwatch-167"><a href="#unwatch-167"><span class="linenos">167</span></a>            <span class="k">del</span> <span class="n">_registry</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -677,8 +1017,8 @@ the watchable will be appended to the global watcher registry stack instead of r
 
     </div>
     <a class="headerlink" href="#get_registry"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_registry-127"><a href="#get_registry-127"><span class="linenos">127</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_registry</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Watchable</span><span class="p">]]:</span>
-</span><span id="get_registry-128"><a href="#get_registry-128"><span class="linenos">128</span></a>    <span class="k">return</span> <span class="n">_registry</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_registry-169"><a href="#get_registry-169"><span class="linenos">169</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_registry</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">deque</span><span class="p">[</span><span class="n">Watchable</span><span class="p">]]:</span>
+</span><span id="get_registry-170"><a href="#get_registry-170"><span class="linenos">170</span></a>    <span class="k">return</span> <span class="n">_registry</span>
 </span></pre></div>
 
 
@@ -696,9 +1036,9 @@ the watchable will be appended to the global watcher registry stack instead of r
 
     </div>
     <a class="headerlink" href="#clear"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="clear-130"><a href="#clear-130"><span class="linenos">130</span></a><span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">():</span>
-</span><span id="clear-131"><a href="#clear-131"><span class="linenos">131</span></a>    <span class="k">global</span> <span class="n">_registry</span>
-</span><span id="clear-132"><a href="#clear-132"><span class="linenos">132</span></a>    <span class="n">_registry</span> <span class="o">=</span> <span class="p">{}</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="clear-172"><a href="#clear-172"><span class="linenos">172</span></a><span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">():</span>
+</span><span id="clear-173"><a href="#clear-173"><span class="linenos">173</span></a>    <span class="k">global</span> <span class="n">_registry</span>
+</span><span id="clear-174"><a href="#clear-174"><span class="linenos">174</span></a>    <span class="n">_registry</span> <span class="o">=</span> <span class="p">{}</span>
 </span></pre></div>
 
 

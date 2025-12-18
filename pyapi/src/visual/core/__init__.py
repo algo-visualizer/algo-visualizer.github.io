@@ -11,11 +11,12 @@ import json
 from copy import deepcopy
 from visual.core import watcher
 from visual.core.io import snapshot_io, redirect_stdout
-from visual.core.watcher import WatcherContext, DSWatcherContext
-from typing import Callable
+from visual.core.watcher import WatcherContext, PointableWatcherContext, Pointable2DWatcherContext
+from typing import Callable, cast
 from visual.types.snapshot import Snapshot
 from visual.types.graph import GraphGroup, NodeId, NodeWeight
-from visual.types.watchable import Watchable, Array, Array2D, Nodes, Var, DS
+from visual.types.watchable import Var
+from visual.types.pointable import Pointable, Pointable2D, DS, Array, Array2D, Nodes 
 
 # Global state for snapshots and configuration
 _snapshots: list[Snapshot] = []
@@ -112,7 +113,7 @@ def _visual_api_watch_var(var: str, *vars: str, expr: bool = False) -> WatcherCo
         watcher.watch(v)
     return WatcherContext(l)
 
-def _visual_api_inherit(ds_var: str) -> DSWatcherContext[DS]:
+def _visual_api_inherit(ds_var: str) -> PointableWatcherContext[Pointable] | Pointable2DWatcherContext[Pointable2D]:
     """
     Inherit (deepcopy) the watchable at the top of the registry stack. The watchable must be a DS.
 
@@ -131,7 +132,7 @@ def _visual_api_inherit(ds_var: str) -> DSWatcherContext[DS]:
         breakpoint() # It will show 'arr' with the index 'i', 'j'
         ```
     Returns:
-        DSWatcherContext[DS]: The context manager containing the inherited watchable.
+        PointableWatcherContext | Pointable2DWatcherContext: The context manager containing the inherited watchable.
     """
     registry = watcher.get_registry()
     if not registry.get(ds_var):
@@ -139,12 +140,19 @@ def _visual_api_inherit(ds_var: str) -> DSWatcherContext[DS]:
     w = registry[ds_var][-1]
     if not isinstance(w, DS):
         raise ValueError(f"Can't inherit watchable {ds_var} that is not a DS ")
-    new_w = deepcopy(w)
-    watcher.watch(new_w)
-    return DSWatcherContext([new_w])
+    if isinstance(w, Pointable):
+        new_w = deepcopy(w)
+        watcher.watch(new_w)
+        return PointableWatcherContext([new_w])
+    elif isinstance(w, Pointable2D):
+        new_w = deepcopy(w)
+        watcher.watch(new_w)
+        return Pointable2DWatcherContext([new_w])
+    else:
+        raise ValueError(f"There are no matching context constructor for watchable {ds_var}")
 
 
-def _visual_api_watch_array(var: str, *vars: str, expr: bool = False) -> DSWatcherContext[Array]:
+def _visual_api_watch_array(var: str, *vars: str, expr: bool = False) -> PointableWatcherContext[Array]:
     """
     Registers an iterable variable to be watched in the snapshot.
     
@@ -170,16 +178,16 @@ def _visual_api_watch_array(var: str, *vars: str, expr: bool = False) -> DSWatch
         ```
 
     Returns:
-        DSWatcherContext[Array]: The context manager containing the watched variables.
+        PointableWatcherContext[Array]: The context manager containing the watched variables.
     """
     l: list[Array] = []
     for varname in (var, *vars):
         v = Array(varname, expr=expr)
         l.append(v)
         watcher.watch(v)
-    return DSWatcherContext(l)
+    return PointableWatcherContext(l)
 
-def _visual_api_watch_array2d(var: str, *vars: str, expr: bool = False) -> DSWatcherContext[Array2D]:
+def _visual_api_watch_array2d(var: str, *vars: str, expr: bool = False) -> Pointable2DWatcherContext[Array2D]:
     """
     Registers an 2-dimensional iterable variable to be watched in the snapshot.
     
@@ -193,14 +201,14 @@ def _visual_api_watch_array2d(var: str, *vars: str, expr: bool = False) -> DSWat
     **Use `expr=False` in most cases.** Use `expr=True` when you must watch a composite expression or computation that is not stored in a simple variable.
 
     Returns:
-        DSWatcherContext[Array2D]: The context manager containing the watched variables.
+        Pointable2DWatcherContext[Array2D]: The context manager containing the watched variables.
     """
     l: list[Array2D] = []
     for varname in (var, *vars):
         v = Array2D(varname, expr=expr)
         l.append(v)
         watcher.watch(v)
-    return DSWatcherContext(l)
+    return Pointable2DWatcherContext(l)
 
 def _HEAD_ID_FUNC_DEFAULT(nodes: list[int]):
     return 0
@@ -218,7 +226,7 @@ def _visual_api_watch_nodes[_NodesType, _NodeType, _IdType: NodeId, _WeightType:
         value: Callable[[_NodesType, _IdType], _NodeType] = _VALUE_FUNC_DEFAULT,
         *,
         expr: bool = False,
-    ) -> DSWatcherContext[Nodes[_NodesType, _NodeType, _IdType, _WeightType]]:
+    ) -> PointableWatcherContext[Nodes[_NodesType, _NodeType, _IdType, _WeightType]]:
     """
     Registers a nodes variable to be watched in the snapshot.
 
@@ -265,13 +273,13 @@ def _visual_api_watch_nodes[_NodesType, _NodeType, _IdType: NodeId, _WeightType:
 
         ```
     Returns:
-        DSWatcherContext: The context manager containing the registered Nodes watchable.
+        PointableWatcherContext: The context manager containing the registered Nodes watchable.
     """
     v = Nodes[_NodesType, _NodeType, _IdType, _WeightType](
         var, head_id, next_ids, value, expr=expr,
     )
     watcher.watch(v)
-    return DSWatcherContext([v])
+    return PointableWatcherContext([v])
 
 
 def _visual_api_reset_state():
