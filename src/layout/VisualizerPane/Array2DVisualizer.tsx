@@ -279,11 +279,7 @@ const Array2DVisualizer: React.FC<Array2DVisualizerProps> = ({
       const isSentinel = isRowTopSentinel || isRowBottomSentinel;
 
       const rowX = gridStartX - 30; // Tip of arrow
-      const rowY = isRowTopSentinel
-        ? gridStartY - CELL_PADDING * 5
-        : isRowBottomSentinel
-          ? gridStartY + rowCount * cellSpan - CELL_PADDING * 5
-          : gridStartY + rIndex * cellSpan + CELL_SIZE / 2;
+      const rowY = gridStartY + rIndex * cellSpan + CELL_SIZE / 2;
 
       const group = svg
         .append("g")
@@ -327,11 +323,7 @@ const Array2DVisualizer: React.FC<Array2DVisualizerProps> = ({
       const isSentinel = isColLeftSentinel || isColRightSentinel;
 
       const colY = gridStartY - 30; // Tip at margin-20
-      const colX = isColLeftSentinel
-        ? gridStartX - CELL_PADDING * 5
-        : isColRightSentinel
-          ? gridStartX + colCount * cellSpan - CELL_PADDING * 5
-          : gridStartX + cIndex * cellSpan + CELL_SIZE / 2;
+      const colX = gridStartX + cIndex * cellSpan + CELL_SIZE / 2;
 
       const group = svg
         .append("g")
