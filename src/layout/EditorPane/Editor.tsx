@@ -36,6 +36,7 @@ const CodeEditor: React.FC<EditorProps> = ({
   const workerRef = useRef<Worker | null>(null);
   const completionProviderRef = useRef<any>(null);
   const hoverProviderRef = useRef<any>(null);
+  const signatureHelpProviderRef = useRef<any>(null);
   const breakpointsRef = useRef<Set<number>>(breakpoints);
 
   // Flag to prevent update loops
@@ -208,6 +209,46 @@ const CodeEditor: React.FC<EditorProps> = ({
       );
     }
 
+    // Register Signature Help Provider
+    if (!signatureHelpProviderRef.current) {
+      signatureHelpProviderRef.current =
+        monaco.languages.registerSignatureHelpProvider("python", {
+          signatureHelpTriggerCharacters: ["(", ","],
+          provideSignatureHelp: (model: any, position: any) => {
+            const worker = workerRef.current;
+            if (!worker) return null;
+
+            const code = model.getValue();
+            const requestId = Math.random().toString(36).substring(7);
+
+            return new Promise((resolve) => {
+              const handler = (e: MessageEvent) => {
+                if (e.data.id === requestId) {
+                  worker.removeEventListener("message", handler);
+                  const result = e.data.result;
+                  if (!result) {
+                    resolve(null);
+                    return;
+                  }
+                  resolve({
+                    value: result,
+                    dispose: () => {},
+                  });
+                }
+              };
+
+              worker.addEventListener("message", handler);
+              worker.postMessage({
+                id: requestId,
+                type: "signature",
+                code: code,
+                line: position.lineNumber,
+                column: position.column - 1,
+              });
+            });
+          },
+        });
+    }
     const clearPreview = () => {
       if (!editorRef.current) return;
       previewDecorationsRef.current = editorRef.current.deltaDecorations(
@@ -385,6 +426,10 @@ const CodeEditor: React.FC<EditorProps> = ({
       if (hoverProviderRef.current) {
         hoverProviderRef.current.dispose();
         hoverProviderRef.current = null;
+      }
+      if (signatureHelpProviderRef.current) {
+        signatureHelpProviderRef.current.dispose();
+        signatureHelpProviderRef.current = null;
       }
       if (previewDecorationsRef.current.length && editorRef.current) {
         previewDecorationsRef.current = editorRef.current.deltaDecorations(

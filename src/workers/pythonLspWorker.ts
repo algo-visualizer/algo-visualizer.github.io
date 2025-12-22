@@ -85,6 +85,24 @@ get_hover(_temp_code, _temp_line, _temp_column)
       } finally {
         if (resultProxy) resultProxy.destroy();
       }
+    } else if (type === "signature") {
+      pyodide.globals.set("_temp_code", code);
+      pyodide.globals.set("_temp_line", line);
+      pyodide.globals.set("_temp_column", column);
+      const resultProxy = pyodide.runPython(`
+get_signature_help(_temp_code, _temp_line, _temp_column)
+`);
+      try {
+        pyodide.globals.delete("_temp_code");
+        pyodide.globals.delete("_temp_line");
+        pyodide.globals.delete("_temp_column");
+        const result = resultProxy
+          ? resultProxy.toJs({ dict_converter: Object.fromEntries })
+          : null;
+        ctx.postMessage({ id, result });
+      } finally {
+        if (resultProxy) resultProxy.destroy();
+      }
     }
   } catch (err) {
     console.error(`LSP error (${type}):`, err);
