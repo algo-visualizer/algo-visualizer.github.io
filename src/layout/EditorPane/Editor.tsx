@@ -1,9 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
+import { type Monaco } from "./types";
 import "./style.css";
 import PythonLspWorker from "../../workers/pythonLspWorker?worker";
-
-type Monaco = typeof import("monaco-editor");
+import {
+  registerCompletionProvider,
+  registerHoverProvider,
+  registerSignatureHelpProvider,
+} from "./providers";
 
 interface EditorProps {
   value: string;
@@ -70,184 +74,23 @@ const CodeEditor: React.FC<EditorProps> = ({
 
     // Register Completion Provider
     if (!completionProviderRef.current) {
-      completionProviderRef.current =
-        monaco.languages.registerCompletionItemProvider("python", {
-          triggerCharacters: ["."],
-          provideCompletionItems: (model: any, position: any) => {
-            const worker = workerRef.current;
-            if (!worker) return { suggestions: [] };
-
-            const code = model.getValue();
-            const requestId = Math.random().toString(36).substring(7);
-
-            return new Promise((resolve) => {
-              const handler = (e: MessageEvent) => {
-                if (e.data.id === requestId) {
-                  worker.removeEventListener("message", handler);
-
-                  const word = model.getWordUntilPosition(position);
-                  const range = {
-                    startLineNumber: position.lineNumber,
-                    endLineNumber: position.lineNumber,
-                    startColumn: word.startColumn,
-                    endColumn: word.endColumn,
-                  };
-
-                  const suggestions = e.data.results.map((item: any) => {
-                    let kind = monaco.languages.CompletionItemKind.Text;
-                    switch (item.kind) {
-                      case "function":
-                        kind = monaco.languages.CompletionItemKind.Function;
-                        break;
-                      case "keyword":
-                        kind = monaco.languages.CompletionItemKind.Keyword;
-                        break;
-                      case "module":
-                        kind = monaco.languages.CompletionItemKind.Module;
-                        break;
-                      case "class":
-                        kind = monaco.languages.CompletionItemKind.Class;
-                        break;
-                      case "instance":
-                        kind = monaco.languages.CompletionItemKind.Variable;
-                        break;
-                      case "statement":
-                        kind = monaco.languages.CompletionItemKind.Variable;
-                        break;
-                      case "param":
-                        kind = monaco.languages.CompletionItemKind.Variable;
-                        break;
-                      default:
-                        kind = monaco.languages.CompletionItemKind.Text;
-                    }
-
-                    return {
-                      label: item.label,
-                      kind: kind,
-                      detail: item.detail,
-                      insertText: item.insertText,
-                      range: range,
-                    } as any;
-                  });
-
-                  resolve({ suggestions });
-                }
-              };
-
-              worker.addEventListener("message", handler);
-              worker.postMessage({
-                id: requestId,
-                type: "complete",
-                code: code,
-                line: position.lineNumber,
-                column: position.column - 1,
-              });
-            });
-          },
-        });
+      completionProviderRef.current = registerCompletionProvider(
+        monaco,
+        workerRef,
+      );
     }
 
     // Register Hover Provider
     if (!hoverProviderRef.current) {
-      hoverProviderRef.current = monaco.languages.registerHoverProvider(
-        "python",
-        {
-          provideHover: (model: any, position: any) => {
-            const worker = workerRef.current;
-            if (!worker) return null;
-
-            const code = model.getValue();
-            const requestId = Math.random().toString(36).substring(7);
-
-            return new Promise((resolve) => {
-              const handler = (e: MessageEvent) => {
-                if (e.data.id === requestId) {
-                  worker.removeEventListener("message", handler);
-                  const result = e.data.result;
-                  if (!result) {
-                    resolve(null);
-                    return;
-                  }
-
-                  // Handle both single object (legacy) and array of objects
-                  const items = Array.isArray(result) ? result : [result];
-                  const contents = [];
-
-                  for (const item of items) {
-                    if (!item) continue;
-
-                    // 1. Code Signature
-                    if (item.code) {
-                      contents.push({
-                        value: "```python\n" + item.code + "\n```",
-                      });
-                    }
-
-                    // 2. Docstring
-                    if (item.docstring) {
-                      contents.push({ value: item.docstring });
-                    }
-                  }
-
-                  resolve({
-                    contents: contents,
-                  });
-                }
-              };
-
-              worker.addEventListener("message", handler);
-              worker.postMessage({
-                id: requestId,
-                type: "hover",
-                code: code,
-                line: position.lineNumber,
-                column: position.column - 1,
-              });
-            });
-          },
-        },
-      );
+      hoverProviderRef.current = registerHoverProvider(monaco, workerRef);
     }
 
     // Register Signature Help Provider
     if (!signatureHelpProviderRef.current) {
-      signatureHelpProviderRef.current =
-        monaco.languages.registerSignatureHelpProvider("python", {
-          signatureHelpTriggerCharacters: ["(", ","],
-          provideSignatureHelp: (model: any, position: any) => {
-            const worker = workerRef.current;
-            if (!worker) return null;
-
-            const code = model.getValue();
-            const requestId = Math.random().toString(36).substring(7);
-
-            return new Promise((resolve) => {
-              const handler = (e: MessageEvent) => {
-                if (e.data.id === requestId) {
-                  worker.removeEventListener("message", handler);
-                  const result = e.data.result;
-                  if (!result) {
-                    resolve(null);
-                    return;
-                  }
-                  resolve({
-                    value: result,
-                    dispose: () => {},
-                  });
-                }
-              };
-
-              worker.addEventListener("message", handler);
-              worker.postMessage({
-                id: requestId,
-                type: "signature",
-                code: code,
-                line: position.lineNumber,
-                column: position.column - 1,
-              });
-            });
-          },
-        });
+      signatureHelpProviderRef.current = registerSignatureHelpProvider(
+        monaco,
+        workerRef,
+      );
     }
     const clearPreview = () => {
       if (!editorRef.current) return;
