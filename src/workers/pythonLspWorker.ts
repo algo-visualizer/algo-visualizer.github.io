@@ -17,60 +17,16 @@ async function initPyodide() {
     // Install Jedi
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install("jedi");
     await micropip.install(
       `/pyodide_packages/algo_visualizer_python-0.0.0-py3-none-any.whl?v=${Date.now()}`,
+    );
+    await micropip.install(
+      `/pyodide_packages/python_lsp-0.0.0-py3-none-any.whl`,
     );
 
     // Create a simple Python script wrapper for completions and hover
     pyodide.runPython(`
-      import jedi
-      
-      def get_completions(source, line, column):
-          try:
-              script = jedi.Script(source, path="main.py")
-              completions = script.complete(line, column)
-              
-              results = []
-              for c in completions:
-                  results.append({
-                      "label": c.name,
-                      "kind": c.type,
-                      "detail": c.description,
-                      "insertText": c.name
-                  })
-              return results
-          except Exception as e:
-              return []
-
-      def get_hover(source, line, column):
-          try:
-              script = jedi.Script(source, path="main.py")
-              # help() is good for docs, infer() is good for types. 
-              # help() usually falls back to infer() if no docs found, but explicitly checking gives us more control.
-              contexts = script.help(line, column)
-              if not contexts:
-                  contexts = script.infer(line, column)
-              
-              if not contexts:
-                  return None
-
-              c = contexts[0]
-              
-              # Construct a signature-like string
-              # c.description usually gives "def func(a, b)" or "class Foo"
-              signature = c.description
-              
-              # If it's a function/method, we might want to try to get a better signature with type hints if possible
-              # but default description is often good enough for basics.
-              
-              return {
-                  "code": signature,
-                  "docstring": c.docstring(),
-                  "type": c.type
-              }
-          except Exception as e:
-              return None
+from lsp import *
     `);
 
     jediReady = true;
@@ -93,21 +49,42 @@ ctx.addEventListener("message", async (event: MessageEvent) => {
 
   try {
     if (type === "complete") {
-      const getCompletions = pyodide.globals.get("get_completions");
-      const resultsProxy = getCompletions(code, line, column);
-      const results = resultsProxy.toJs({ dict_converter: Object.fromEntries });
-      resultsProxy.destroy();
-
-      ctx.postMessage({ id, results });
+      // set temp vars
+      pyodide.globals.set("_temp_code", code);
+      pyodide.globals.set("_temp_line", line);
+      pyodide.globals.set("_temp_column", column);
+      const resultsProxy = pyodide.runPython(`
+get_completions(_temp_code, _temp_line, _temp_column)
+`);
+      try {
+        pyodide.globals.delete("_temp_code");
+        pyodide.globals.delete("_temp_line");
+        pyodide.globals.delete("_temp_column");
+        const results = resultsProxy.toJs({
+          dict_converter: Object.fromEntries,
+        });
+        ctx.postMessage({ id, results });
+      } finally {
+        if (resultsProxy) resultsProxy.destroy();
+      }
     } else if (type === "hover") {
-      const getHover = pyodide.globals.get("get_hover");
-      const resultProxy = getHover(code, line, column);
-      const result = resultProxy
-        ? resultProxy.toJs({ dict_converter: Object.fromEntries })
-        : null;
-      if (resultProxy) resultProxy.destroy();
-
-      ctx.postMessage({ id, result });
+      pyodide.globals.set("_temp_code", code);
+      pyodide.globals.set("_temp_line", line);
+      pyodide.globals.set("_temp_column", column);
+      const resultProxy = pyodide.runPython(`
+get_hover(_temp_code, _temp_line, _temp_column)
+`);
+      try {
+        pyodide.globals.delete("_temp_code");
+        pyodide.globals.delete("_temp_line");
+        pyodide.globals.delete("_temp_column");
+        const result = resultProxy
+          ? resultProxy.toJs({ dict_converter: Object.fromEntries })
+          : null;
+        ctx.postMessage({ id, result });
+      } finally {
+        if (resultProxy) resultProxy.destroy();
+      }
     }
   } catch (err) {
     console.error(`LSP error (${type}):`, err);

@@ -3,6 +3,8 @@ import Editor, { type OnMount } from "@monaco-editor/react";
 import "./style.css";
 import PythonLspWorker from "../../workers/pythonLspWorker?worker";
 
+type Monaco = typeof import("monaco-editor");
+
 interface EditorProps {
   value: string;
   onChange: (value: string | undefined) => void;
@@ -25,8 +27,6 @@ const CodeEditor: React.FC<EditorProps> = ({
 }) => {
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
-
-  // Static CSS now lives in Editor.css; no dynamic injection needed
 
   // Separate refs to manage decorations independently
   const bpDecorationsRef = useRef<string[]>([]);
@@ -63,7 +63,7 @@ const CodeEditor: React.FC<EditorProps> = ({
     };
   }, []);
 
-  const handleEditorDidMount: OnMount = (editor, monaco) => {
+  const handleEditorDidMount: OnMount = (editor, monaco: Monaco) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
 

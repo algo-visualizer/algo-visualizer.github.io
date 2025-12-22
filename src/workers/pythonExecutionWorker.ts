@@ -89,9 +89,7 @@ _visual_api_set_linemap(_temp_linemap_json)
 
     // 5. Retrieve Snapshots
     const snapshotsJson = pyodide.runPython(`_visual_api_get_snapshots_json()`);
-
     const snapshots = JSON.parse(snapshotsJson);
-
     ctx.postMessage({
       type: "result",
       snapshots: snapshots,

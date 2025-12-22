@@ -1,0 +1,3 @@
+pdoc
+-e pyapi/
+-e pylsp/
