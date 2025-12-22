@@ -17,7 +17,10 @@ export const instrumentCode = (code: string, breakpoints: Set<number>) => {
       // 1. If the current line has statements (non-whitespace), use its indentation.
       // 2. If the current line is blank, use the indentation of the first preceding non-blank line.
 
-      if (/\S/.test(lineContent)) {
+      // A line is considered "non-blank" if it contains non-whitespace characters
+      // and is not a Python comment line (starts with #).
+      const isNonBlank = /^\s*[^#\s]/.test(lineContent);
+      if (isNonBlank) {
         const match = lineContent.match(/^(\s*)/);
         indent = match?.[1] ?? "";
 
@@ -32,12 +35,13 @@ export const instrumentCode = (code: string, breakpoints: Set<number>) => {
         // Search backwards
         for (let j = i - 1; j >= 0; j--) {
           const line = lines[j];
-          if (line !== undefined && /\S/.test(line)) {
+          if (line !== undefined && /^\s*[^#\s]/.test(line)) {
             const match = line.match(/^(\s*)/);
             indent = match?.[1] ?? "";
 
-            // If the first non-blank line above ends with a colon, add one extra indentation level
-            if (line.trimEnd().endsWith(":")) {
+            // If the first non-blank line above ends with a colon (ignoring trailing comments),
+            // add one extra indentation level
+            if (/:[\s\t]*(?:#.*)?$/.test(line)) {
               const indentUnit = /\t/.test(indent) ? "\t" : "    ";
               indent += indentUnit;
             }

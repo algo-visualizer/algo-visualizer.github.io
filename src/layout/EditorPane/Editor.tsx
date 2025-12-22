@@ -163,31 +163,29 @@ const CodeEditor: React.FC<EditorProps> = ({
                 if (e.data.id === requestId) {
                   worker.removeEventListener("message", handler);
                   const result = e.data.result;
-
                   if (!result) {
                     resolve(null);
                     return;
                   }
 
-                  // Construct hover contents
-                  // result = { code, docstring, type }
+                  // Handle both single object (legacy) and array of objects
+                  const items = Array.isArray(result) ? result : [result];
                   const contents = [];
 
-                  // 1. Code Signature
-                  if (result.code) {
-                    contents.push({
-                      value: "```python\n" + result.code + "\n```",
-                    });
-                  } else if (result.name) {
-                    contents.push({
-                      value: "```python\n" + result.name + "\n```",
-                    });
-                  }
+                  for (const item of items) {
+                    if (!item) continue;
 
-                  // 2. Docstring (already formatted or plain text, Monaco handles md)
-                  if (result.docstring) {
-                    // Add a separator or just append
-                    contents.push({ value: result.docstring });
+                    // 1. Code Signature
+                    if (item.code) {
+                      contents.push({
+                        value: "```python\n" + item.code + "\n```",
+                      });
+                    }
+
+                    // 2. Docstring
+                    if (item.docstring) {
+                      contents.push({ value: item.docstring });
+                    }
                   }
 
                   resolve({

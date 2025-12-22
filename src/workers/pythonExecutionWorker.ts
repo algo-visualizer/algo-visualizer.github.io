@@ -18,9 +18,6 @@ async function initPyodide() {
       },
     });
 
-    // Install commonly used packages for algos
-    // await pyodide.loadPackage("numpy"); // Optional
-
     // Install local algo-visualizer-python package from /public/pyodide/
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");

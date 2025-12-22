@@ -96,6 +96,7 @@ const App: React.FC = () => {
   const handleVisualize = async () => {
     if (!isPyodideReady) return;
     setIsExecuting(true);
+    let hasError = false;
     setError(null);
     setHistory([]);
     setConsoleLogs([]);
@@ -105,6 +106,7 @@ const App: React.FC = () => {
       const result = await runUserCode(code, breakpoints);
 
       if (result.error) {
+        hasError = true;
         setError(result.error);
         setHistory([]);
       } else {
@@ -113,6 +115,7 @@ const App: React.FC = () => {
           setCurrentStep(0);
           setIsVisualized(true);
         } else {
+          hasError = true;
           // No snapshots captured (maybe no breakpoints hit or code finished without hitting)
           if (breakpoints.size > 0) {
             setError("Code executed but no breakpoints were hit.");
@@ -122,11 +125,12 @@ const App: React.FC = () => {
         }
       }
     } catch (err: any) {
+      hasError = true;
       setError(err.message || "An unexpected error occurred");
     } finally {
       setIsExecuting(false);
       // Auto-switch to visualizer tab on mobile if visualization started successfully
-      if (!error && activeMobileTab === "editor" && window.innerWidth < 1024) {
+      if (!hasError && activeMobileTab === "editor" && !isDesktop) {
         setActiveMobileTab("visualizer");
       }
     }

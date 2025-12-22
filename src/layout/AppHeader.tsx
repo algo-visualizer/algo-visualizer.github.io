@@ -23,7 +23,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         <Menu className="w-5 h-5" />
       </button>
 
-      <h1 className="font-bold text-lg tracking-tight bg-linear-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
+      <h1 className="text-lg tracking-tight bg-white bg-clip-text text-transparent">
         Algo Visualizer
       </h1>
       <span className="mx-3 text-zinc-600 hidden sm:inline">|</span>

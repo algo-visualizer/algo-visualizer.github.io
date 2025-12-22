@@ -25,7 +25,7 @@ const AppDrawer: React.FC<AppDrawerProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-12 border-b border-zinc-800 flex items-center justify-between px-4">
-          <h2 className="font-bold text-lg tracking-tight bg-linear-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
+          <h2 className="text-lg tracking-tight bg-white bg-clip-text text-transparent">
             Algo Visualizer
           </h2>
           <button
