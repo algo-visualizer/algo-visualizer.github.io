@@ -52,6 +52,7 @@ export const InstrumentedPanel = ({
       domReadOnly: true,
       renderSideBySide: true,
       originalEditable: false,
+      wordWrap: "on",
     }}
   />
 );

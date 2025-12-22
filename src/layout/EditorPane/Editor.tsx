@@ -394,14 +394,14 @@ const CodeEditor: React.FC<EditorProps> = ({
       return;
 
     const editor = editorRef.current;
-    const monaco = monacoRef.current;
+    const monaco: Monaco = monacoRef.current;
 
     const newDecorations: any[] = [];
     breakpoints.forEach((line) => {
       newDecorations.push({
         range: new monaco.Range(line, 1, line, 1),
         options: {
-          isWholeLine: true,
+          isWholeLine: false,
           glyphMarginClassName: "breakpoint-glyph",
           // Stickiness makes decorations follow text edits
           stickiness:
@@ -486,6 +486,7 @@ const CodeEditor: React.FC<EditorProps> = ({
           lineNumbersMinChars: 2,
           scrollBeyondLastLine: false,
           padding: { top: 16 },
+          wordWrap: "on",
         }}
       />
     </div>
