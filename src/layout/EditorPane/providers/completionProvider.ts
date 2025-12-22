@@ -27,7 +27,7 @@ export const registerCompletionProvider = (
               endColumn: word.endColumn,
             };
 
-            const suggestions = e.data.results.map((item: any) => {
+            const suggestions = e.data.result.map((item: any) => {
               let kind = monaco.languages.CompletionItemKind.Text;
               switch (item.kind) {
                 case "function":
