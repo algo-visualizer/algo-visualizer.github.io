@@ -79,3 +79,9 @@
 1.  **高优先级：** 解耦合 `App.tsx` 与 `Editor.tsx`，提取逻辑到 Hooks 中。（解决 SRP）
 2.  **中优先级：** 引入组件注册表管理可视化类型。（解决 OCP）
 3.  **长期目标：** 抽象执行引擎层，解除与 Python 环境的强绑定。（解决 DIP）
+
+**推荐技术栈更新：**
+
+- **Logic**: React Custom Hooks (基础同步)
+- **State**: Zustand (解决组件间通信与数据共享)
+- **Pattern**: Registry Pattern (解决可视化组件扩展)
