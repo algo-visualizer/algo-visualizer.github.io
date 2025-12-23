@@ -69,9 +69,9 @@ const App: React.FC = () => {
     return () => media.removeEventListener("change", updateMatch);
   }, []);
 
-  const handleLSPReady = () => {
+  const handleLSPReady = useCallback(() => {
     setIsLSPReady(true);
-  };
+  }, []);
 
   // Handlers
   const toggleBreakpoint = useCallback((line: number) => {
