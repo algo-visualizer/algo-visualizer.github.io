@@ -9,14 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@monaco-editor/react": "^4.6.0",
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.18",
     "d3": "^7.9.0",
-    "lucide-react": "^0.555.0",
+    "lucide-react": "^0.562.0",
     "pyodide": "0.29.0",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "react-resizable-panels": "^4.0.7",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-resizable-panels": "^4.0.15",
     "tailwindcss": "^4.1.18",
     "zustand": "^5.0.9"
   },
@@ -25,8 +25,8 @@
     "@types/d3": "^7.4.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "typescript": "^5.2.2",
-    "vite": "^7.2.6"
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
   }
 }
