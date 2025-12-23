@@ -1,34 +1,30 @@
-import React, { type ReactNode, type SetStateAction } from "react";
+import React, { type ReactNode } from "react";
 import CodeEditor from "./Editor";
 import { AlertCircle } from "lucide-react";
+import { useVisualizationStore } from "../../stores/useVisualizationStore";
 
 interface EditorPaneProps {
-  code: string;
-  onChange: (val: string) => void;
-  breakpoints: Set<number>;
-  toggleBreakpoint: (line: number) => void;
-  onBreakpointsChange: (newBreakpoints: Set<number>) => void;
-  onLSPReady: () => void;
-  activeLine: number | null;
-  error: string | null;
-  setError: (val: SetStateAction<string | null>) => void;
   isActive: boolean;
   children?: ReactNode;
 }
 
-const EditorPane: React.FC<EditorPaneProps> = ({
-  code,
-  onChange,
-  breakpoints,
-  toggleBreakpoint,
-  onBreakpointsChange,
-  onLSPReady,
-  activeLine,
-  error,
-  setError,
-  isActive,
-  children,
-}) => {
+const EditorPane: React.FC<EditorPaneProps> = ({ isActive, children }) => {
+  const code = useVisualizationStore((state) => state.code);
+  const breakpoints = useVisualizationStore((state) => state.breakpoints);
+  const error = useVisualizationStore((state) => state.error);
+  const history = useVisualizationStore((state) => state.history);
+  const currentStep = useVisualizationStore((state) => state.currentStep);
+  const setCode = useVisualizationStore((state) => state.setCode);
+  const toggleBreakpoint = useVisualizationStore(
+    (state) => state.toggleBreakpoint,
+  );
+  const setError = useVisualizationStore((state) => state.setError);
+  const setBreakpoints = useVisualizationStore((state) => state.setBreakpoints);
+  const setIsLSPReady = useVisualizationStore((state) => state.setIsLSPReady);
+
+  const currentSnapshot = history[currentStep] || null;
+  const activeLine = currentSnapshot ? currentSnapshot.line : null;
+
   return (
     <div
       className={`flex-col border-r border-zinc-800 h-full ${
@@ -39,11 +35,11 @@ const EditorPane: React.FC<EditorPaneProps> = ({
         <div className="grow relative min-h-0">
           <CodeEditor
             value={code}
-            onChange={(val) => onChange(val || "")}
+            onChange={(val) => setCode(val || "")}
             breakpoints={breakpoints}
             toggleBreakpoint={toggleBreakpoint}
-            onBreakpointsChange={onBreakpointsChange}
-            onLSPReady={onLSPReady}
+            onBreakpointsChange={setBreakpoints}
+            onLSPReady={() => setIsLSPReady(true)}
             activeLine={activeLine}
           />
 

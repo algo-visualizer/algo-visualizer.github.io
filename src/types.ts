@@ -19,3 +19,5 @@ export interface LogEntry {
   content: string;
   timestamp: number;
 }
+
+export type PanelKey = "instrumented" | "console" | null;

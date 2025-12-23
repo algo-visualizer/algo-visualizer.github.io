@@ -1,16 +1,10 @@
 import React from "react";
+import { useUIStore } from "../stores/useUIStore";
 
-type MobileTab = "editor" | "visualizer";
+const MobileTabs: React.FC = () => {
+  const activeMobileTab = useUIStore((state) => state.activeMobileTab);
+  const setActiveMobileTab = useUIStore((state) => state.setActiveMobileTab);
 
-interface MobileTabsProps {
-  activeMobileTab: MobileTab;
-  setActiveMobileTab: (tab: MobileTab) => void;
-}
-
-const MobileTabs: React.FC<MobileTabsProps> = ({
-  activeMobileTab,
-  setActiveMobileTab,
-}) => {
   return (
     <div className="lg:hidden flex border-t border-zinc-800 bg-zinc-900 h-12">
       <button

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback, type RefObject } from "react";
 import { type Monaco } from "../types";
-import PythonLspWorker from "../../../workers/pythonLspWorker?worker";
+import PythonLspWorker from "../../../python/workers/pythonLspWorker?worker";
 import {
   registerCompletionProvider,
   registerHoverProvider,

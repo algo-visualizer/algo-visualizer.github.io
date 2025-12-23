@@ -1,64 +1,61 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { DiffEditor } from "@monaco-editor/react";
 import Console from "./Console";
-import { type LogEntry } from "../../types";
+import { type PanelKey } from "../../types";
+import { useUIStore } from "../../stores/useUIStore";
+import { useVisualizationStore } from "../../stores/useVisualizationStore";
+import { instrumentCode } from "../../python/instrumentation";
 
-export type PanelKey = "instrumented" | "console" | null;
+export { type PanelKey };
 
-export interface PanelDefinition {
-  key: Exclude<PanelKey, null>;
-  label: string;
-  render: () => React.ReactNode;
-}
+export const InstrumentedPanel = () => {
+  const code = useVisualizationStore((state) => state.code);
+  const breakpoints = useVisualizationStore((state) => state.breakpoints);
 
-interface LowerPanelProps {
-  activePanel: PanelKey;
-  panels: PanelDefinition[];
-}
+  const instrumentedCode = useMemo(() => {
+    return instrumentCode(code, breakpoints).instrumentedCode;
+  }, [code, breakpoints]);
 
-const LowerPanel: React.FC<LowerPanelProps> = ({ activePanel, panels }) => {
-  const activeDef = panels.find((p) => p.key === activePanel && activePanel);
+  return (
+    <DiffEditor
+      height="100%"
+      language="python"
+      theme="vs-dark"
+      original={code}
+      modified={instrumentedCode}
+      options={{
+        readOnly: true,
+        minimap: { enabled: false },
+        fontSize: 12,
+        lineNumbers: "on",
+        scrollBeyondLastLine: false,
+        domReadOnly: true,
+        renderSideBySide: true,
+        originalEditable: false,
+        wordWrap: "on",
+      }}
+    />
+  );
+};
 
-  if (!activeDef) return null;
+export const ConsolePanel = () => {
+  const logs = useVisualizationStore((state) => state.consoleLogs);
+  return <Console className="h-full" logs={logs} />;
+};
+
+const LowerPanel: React.FC = () => {
+  const activePanel = useUIStore((state) => state.activePanel);
+
+  if (!activePanel) return null;
 
   return (
     <div className="shrink-0 border-t border-zinc-800 bg-zinc-900">
       <div className="h-64 border-t border-zinc-800 relative">
-        {activeDef.render()}
+        {activePanel === "instrumented" && <InstrumentedPanel />}
+        {activePanel === "console" && <ConsolePanel />}
       </div>
     </div>
   );
 };
-
-export const InstrumentedPanel = ({
-  original,
-  modified,
-}: {
-  original: string;
-  modified: string;
-}) => (
-  <DiffEditor
-    height="100%"
-    language="python"
-    theme="vs-dark"
-    original={original}
-    modified={modified}
-    options={{
-      readOnly: true,
-      minimap: { enabled: false },
-      fontSize: 12,
-      lineNumbers: "on",
-      scrollBeyondLastLine: false,
-      domReadOnly: true,
-      renderSideBySide: true,
-      originalEditable: false,
-      wordWrap: "on",
-    }}
-  />
-);
-
-export const ConsolePanel = ({ logs }: { logs: LogEntry[] }) => (
-  <Console className="h-full" logs={logs} />
-);
 
 export default LowerPanel;

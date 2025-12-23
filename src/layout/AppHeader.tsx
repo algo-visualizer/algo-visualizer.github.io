@@ -1,22 +1,20 @@
 import React from "react";
 import { BookOpen, Menu } from "lucide-react";
+import { useVisualizationStore } from "../stores/useVisualizationStore";
+import { useUIStore } from "../stores/useUIStore";
 
-interface AppHeaderProps {
-  isPyodideReady: boolean;
-  isLSPReady: boolean;
-  onOpenMenu: () => void;
-}
+const AppHeader: React.FC = () => {
+  const isCodeExecutorReady = useVisualizationStore(
+    (state) => state.isCodeExecutorReady,
+  );
+  const isLSPReady = useVisualizationStore((state) => state.isLSPReady);
+  const setIsMenuOpen = useUIStore((state) => state.setIsMenuOpen);
 
-const AppHeader: React.FC<AppHeaderProps> = ({
-  isPyodideReady,
-  isLSPReady,
-  onOpenMenu,
-}) => {
   return (
     <div className="h-12 border-b border-zinc-800 flex items-center px-4 bg-zinc-900 shrink-0">
       {/* Hamburger Menu Button - visible only on small screens */}
       <button
-        onClick={onOpenMenu}
+        onClick={() => setIsMenuOpen(true)}
         className="md:hidden mr-3 p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
         aria-label="Open menu"
       >
@@ -33,17 +31,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({
       <span className="mx-3 text-zinc-600 hidden md:inline">|</span>
       {/* Loading Status Indicators */}
       <div className="hidden md:flex items-center gap-3">
-        {!isPyodideReady && (
+        {!isCodeExecutorReady && (
           <div className="flex items-center gap-1.5 text-xs text-zinc-500">
             <div className="w-3 h-3 border-[1.5px] border-zinc-700 border-t-zinc-400 rounded-full animate-spin" />
-            <span className="hidden sm:inline">Loading Pyodide backend</span>
+            <span className="hidden sm:inline">
+              Loading code execution backend
+            </span>
           </div>
         )}
 
         {!isLSPReady && (
           <div className="flex items-center gap-1.5 text-xs text-zinc-500">
             <div className="w-3 h-3 border-[1.5px] border-zinc-700 border-t-zinc-400 rounded-full animate-spin" />
-            <span className="hidden sm:inline">Loading Python LSP</span>
+            <span className="hidden sm:inline">Loading LSP</span>
           </div>
         )}
       </div>

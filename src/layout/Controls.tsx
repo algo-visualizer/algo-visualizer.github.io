@@ -8,42 +8,38 @@ import {
   Eye,
   Terminal,
 } from "lucide-react";
+import { useVisualizationStore } from "../stores/useVisualizationStore";
+import { useUIStore } from "../stores/useUIStore";
 
-interface ControlsProps {
-  onVisualize: () => void;
-  onNext: () => void;
-  onPrev: () => void;
-  canNext: boolean;
-  canPrev: boolean;
-  isLoading: boolean;
-  stepsInfo: string;
-  isVisualized: boolean;
-  onToggleInstrumented: () => void;
-  showInstrumented: boolean;
-  onToggleConsole: () => void;
-  showConsole: boolean;
-}
+const Controls: React.FC = () => {
+  const currentStep = useVisualizationStore((state) => state.currentStep);
+  const history = useVisualizationStore((state) => state.history);
+  const isExecuting = useVisualizationStore((state) => state.isExecuting);
+  const isCodeExecutorReady = useVisualizationStore(
+    (state) => state.isCodeExecutorReady,
+  );
+  const isVisualized = useVisualizationStore((state) => state.isVisualized);
+  const prevStep = useVisualizationStore((state) => state.prevStep);
+  const nextStep = useVisualizationStore((state) => state.nextStep);
+  const runVisualization = useVisualizationStore(
+    (state) => state.runVisualization,
+  );
 
-const Controls: React.FC<ControlsProps> = ({
-  onVisualize,
-  onNext,
-  onPrev,
-  canNext,
-  canPrev,
-  isLoading,
-  stepsInfo,
-  isVisualized,
-  onToggleInstrumented,
-  showInstrumented,
-  onToggleConsole,
-  showConsole,
-}) => {
+  const activePanel = useUIStore((state) => state.activePanel);
+  const togglePanel = useUIStore((state) => state.togglePanel);
+
+  const canNext = currentStep < history.length - 1;
+  const canPrev = currentStep > 0;
+  const stepsInfo =
+    history.length > 0 ? `${currentStep + 1} / ${history.length}` : "";
+  const isLoading = isExecuting || !isCodeExecutorReady;
+
   return (
     <div className="min-h-16 h-auto border-t border-zinc-800 bg-zinc-900 flex items-center justify-between px-4 lg:px-6 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
       <div className="flex items-center gap-3 md:gap-3.5">
         {/* Visualize Button */}
         <button
-          onClick={onVisualize}
+          onClick={() => runVisualization()}
           disabled={isLoading}
           className="flex h-10 items-center gap-2 bg-zinc-100 hover:bg-white text-zinc-900 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -60,11 +56,11 @@ const Controls: React.FC<ControlsProps> = ({
         <div className="flex items-center gap-2">
           <div className="relative group">
             <button
-              onClick={onToggleInstrumented}
-              aria-pressed={showInstrumented}
+              onClick={() => togglePanel("instrumented")}
+              aria-pressed={activePanel === "instrumented"}
               aria-label="Toggle instrumented code preview"
               className={`h-10 w-10 flex items-center justify-center rounded-md border text-zinc-400 bg-zinc-900 transition-colors focus:outline-none focus:ring-offset-0 focus:ring-offset-zinc-900
-              ${showInstrumented ? "border-emerald-500/50 bg-emerald-950/50 text-emerald-300" : "border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"}
+              ${activePanel === "instrumented" ? "border-emerald-500/50 bg-emerald-950/50 text-emerald-300" : "border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"}
             `}
             >
               <Eye className="w-4 h-4" />
@@ -76,11 +72,11 @@ const Controls: React.FC<ControlsProps> = ({
 
           <div className="relative group">
             <button
-              onClick={onToggleConsole}
-              aria-pressed={showConsole}
+              onClick={() => togglePanel("console")}
+              aria-pressed={activePanel === "console"}
               aria-label="Toggle console"
               className={`h-10 w-10 flex items-center justify-center rounded-md border text-zinc-400 bg-zinc-900 transition-colors focus:outline-none focus:ring-offset-0 focus:ring-offset-zinc-900
-              ${showConsole ? "border-emerald-500/50 bg-emerald-950/50 text-emerald-300" : "border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"}
+              ${activePanel === "console" ? "border-emerald-500/50 bg-emerald-950/50 text-emerald-300" : "border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"}
             `}
             >
               <Terminal className="w-4 h-4" />
@@ -99,7 +95,7 @@ const Controls: React.FC<ControlsProps> = ({
         </span>
 
         <button
-          onClick={onPrev}
+          onClick={prevStep}
           disabled={!canPrev}
           className="p-2 hover:bg-zinc-800 rounded text-zinc-300 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
         >
@@ -107,7 +103,7 @@ const Controls: React.FC<ControlsProps> = ({
         </button>
 
         <button
-          onClick={onNext}
+          onClick={nextStep}
           disabled={!canNext}
           className="p-2 hover:bg-zinc-800 rounded text-zinc-300 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
         >

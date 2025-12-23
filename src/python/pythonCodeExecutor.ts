@@ -1,8 +1,5 @@
 import { type ExecutionResult } from "../types";
-import { instrumentCode } from "../utils/instrumentation"; // Still export this for App.tsx preview if needed, or re-export
-
-// Re-export instrumentCode so App.tsx doesn't break if it imports it from here
-export { instrumentCode };
+import PythonExecutionWorker from "./workers/pythonExecutionWorker?worker";
 
 let worker: Worker | null = null;
 
@@ -20,12 +17,7 @@ export const loadPyodideService = async ({
 }: LoadPyodideCallback): Promise<void> => {
   if (worker) return;
 
-  worker = new Worker(
-    new URL("../workers/pythonExecutionWorker.ts", import.meta.url),
-    {
-      type: "module",
-    },
-  );
+  worker = new PythonExecutionWorker();
 
   worker.addEventListener("message", (event: MessageEvent) => {
     const { type, snapshots, stdout, error } = event.data;

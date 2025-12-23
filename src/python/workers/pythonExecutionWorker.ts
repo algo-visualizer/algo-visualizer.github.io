@@ -1,5 +1,5 @@
 import { loadPyodide, type PyodideInterface } from "pyodide";
-import { instrumentCode } from "../utils/instrumentation";
+import { instrumentCode } from "../instrumentation";
 
 const ctx: Worker = self as any;
 
