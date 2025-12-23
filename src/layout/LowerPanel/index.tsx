@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { DiffEditor } from "@monaco-editor/react";
+import { useMemo, useEffect, useRef } from "react";
+import { DiffEditor, type MonacoDiffEditor } from "@monaco-editor/react";
 import Console from "./Console";
 import { type PanelKey } from "../../types";
 import { useUIStore } from "../../stores/useUIStore";
@@ -11,10 +11,19 @@ export { type PanelKey };
 export const InstrumentedPanel = () => {
   const code = useVisualizationStore((state) => state.code);
   const breakpoints = useVisualizationStore((state) => state.breakpoints);
+  const editorRef = useRef<MonacoDiffEditor | null>(null);
 
   const instrumentedCode = useMemo(() => {
     return instrumentCode(code, breakpoints).instrumentedCode;
   }, [code, breakpoints]);
+
+  useEffect(() => {
+    return () => {
+      if (editorRef.current) {
+        editorRef.current.setModel(null);
+      }
+    };
+  }, []);
 
   return (
     <DiffEditor
@@ -23,6 +32,9 @@ export const InstrumentedPanel = () => {
       theme="vs-dark"
       original={code}
       modified={instrumentedCode}
+      onMount={(editor) => {
+        editorRef.current = editor;
+      }}
       options={{
         readOnly: true,
         minimap: { enabled: false },

@@ -2,6 +2,7 @@ import React, { type ReactNode } from "react";
 import CodeEditor from "./Editor";
 import { AlertCircle } from "lucide-react";
 import { useVisualizationStore } from "../../stores/useVisualizationStore";
+import "./style.css";
 
 interface EditorPaneProps {
   isActive: boolean;

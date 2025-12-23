@@ -1,7 +1,6 @@
 import React, { useRef, useCallback } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { type Monaco, type MonacoEditor } from "./types";
-import "./style.css";
 import { useLSPWorker, useBreakpoints, useActiveLineDecoration } from "./hooks";
 
 interface EditorProps {
@@ -70,6 +69,7 @@ const CodeEditor: React.FC<EditorProps> = ({
           scrollBeyondLastLine: false,
           padding: { top: 16 },
           wordWrap: "on",
+          fixedOverflowWidgets: true,
         }}
       />
     </div>
