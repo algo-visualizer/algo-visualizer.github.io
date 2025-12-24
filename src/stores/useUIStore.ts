@@ -13,6 +13,8 @@ interface UIState {
   setIsMenuOpen: (isOpen: boolean) => void;
   setActiveMobileTab: (tab: "editor" | "visualizer") => void;
   setIsDesktop: (isDesktop: boolean) => void;
+  isSettingsOpen: boolean;
+  setIsSettingsOpen: (isOpen: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -33,4 +35,7 @@ export const useUIStore = create<UIState>((set) => ({
   setActiveMobileTab: (activeMobileTab) => set({ activeMobileTab }),
 
   setIsDesktop: (isDesktop) => set({ isDesktop }),
+
+  isSettingsOpen: false,
+  setIsSettingsOpen: (isSettingsOpen) => set({ isSettingsOpen }),
 }));

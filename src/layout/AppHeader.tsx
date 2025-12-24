@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Menu } from "lucide-react";
+import { BookOpen, Menu, Settings as SettingsIcon } from "lucide-react";
 import { useVisualizationStore } from "../stores/useVisualizationStore";
 import { useUIStore } from "../stores/useUIStore";
 
@@ -9,6 +9,7 @@ const AppHeader: React.FC = () => {
   );
   const isLSPReady = useVisualizationStore((state) => state.isLSPReady);
   const setIsMenuOpen = useUIStore((state) => state.setIsMenuOpen);
+  const setIsSettingsOpen = useUIStore((state) => state.setIsSettingsOpen);
 
   return (
     <div className="h-12 border-b border-zinc-800 flex items-center px-4 bg-zinc-900 shrink-0">
@@ -48,11 +49,18 @@ const AppHeader: React.FC = () => {
         )}
       </div>
 
+      <button
+        onClick={() => setIsSettingsOpen(true)}
+        className="ml-auto hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-100 bg-zinc-800/50 hover:bg-zinc-700/70 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-200 group"
+      >
+        <SettingsIcon className="w-4 h-4 text-zinc-400 group-hover:text-zinc-300 transition-colors" />
+        <span>Settings</span>
+      </button>
       <a
         href="/docs/visual.html"
         target="_blank"
         rel="noopener noreferrer"
-        className="ml-auto hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-100 bg-zinc-800/50 hover:bg-zinc-700/70 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-200 group"
+        className="ml-2 hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-100 bg-zinc-800/50 hover:bg-zinc-700/70 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-200 group"
       >
         <BookOpen className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
         <span>API Reference</span>

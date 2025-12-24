@@ -6,7 +6,7 @@ const ctx: Worker = self as any;
 let pyodide: PyodideInterface | null = null;
 let pyodideReady = false;
 
-async function initPyodide() {
+async function initPyodide(packages: string[] = []) {
   try {
     pyodide = await loadPyodide({
       indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.0/full/",
@@ -25,6 +25,12 @@ async function initPyodide() {
       "/pyodide_packages/algo_visualizer_python-0.0.0-py3-none-any.whl",
     );
 
+    // Install user defined packages
+    if (packages.length > 0) {
+      console.log("Installing user packages:", packages);
+      await micropip.install(packages);
+    }
+
     pyodideReady = true;
     ctx.postMessage({ type: "ready" });
   } catch (err: any) {
@@ -33,10 +39,10 @@ async function initPyodide() {
 }
 
 ctx.addEventListener("message", async (event) => {
-  const { type, code, breakpoints } = event.data;
+  const { type, code, breakpoints, packages } = event.data;
 
   if (type === "init") {
-    await initPyodide();
+    await initPyodide(packages);
     return;
   }
 

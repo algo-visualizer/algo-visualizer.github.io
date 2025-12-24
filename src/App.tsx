@@ -10,6 +10,7 @@ import LowerPanel from "./layout/LowerPanel/index";
 import { useVisualizationStore } from "./stores/useVisualizationStore";
 import { useUIStore } from "./stores/useUIStore";
 import { useCodeExecutor } from "./hooks/useCodeExecutor";
+import Settings from "./layout/Settings";
 import { useResponsiveLayout } from "./hooks/useResponsiveLayout";
 
 const App: React.FC = () => {
@@ -39,6 +40,7 @@ const App: React.FC = () => {
   return (
     <div className="h-full w-full flex flex-col bg-zinc-950 text-zinc-100">
       <AppHeader />
+      <Settings />
 
       <AppDrawer />
 

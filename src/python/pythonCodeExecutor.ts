@@ -41,7 +41,12 @@ export const loadPyodideService = async ({
     }
   });
 
-  worker.postMessage({ type: "init" });
+  const storedPackages = localStorage.getItem("pyodide_packages");
+  const packages = storedPackages
+    ? storedPackages.split("\n").filter((p) => p.trim() !== "")
+    : [];
+
+  worker.postMessage({ type: "init", packages });
 };
 
 export const runUserCode = async (

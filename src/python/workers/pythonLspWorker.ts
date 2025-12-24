@@ -7,7 +7,7 @@ let pyodide: PyodideInterface | null = null;
 let jediReady = false;
 
 // Initialize Pyodide and Jedi
-async function initPyodide() {
+async function initPyodide(packages: string[] = []) {
   try {
     // Load Pyodide (using the same version as the main app)
     pyodide = await loadPyodide({
@@ -24,6 +24,12 @@ async function initPyodide() {
       `/pyodide_packages/python_lsp-0.0.0-py3-none-any.whl`,
     );
 
+    // Install user defined packages
+    if (packages.length > 0) {
+      console.log("Installing user packages (LSP):", packages);
+      await micropip.install(packages);
+    }
+
     // Create a simple Python script wrapper for completions and hover
     pyodide.runPython(`
 from lsp import *
@@ -37,8 +43,6 @@ from lsp import *
   }
 }
 
-initPyodide();
-
 const lspMap: Record<string, string> = {
   complete: "get_completions",
   hover: "get_hover",
@@ -46,7 +50,12 @@ const lspMap: Record<string, string> = {
 };
 
 ctx.addEventListener("message", async (event: MessageEvent) => {
-  const { id, type, code, line, column } = event.data;
+  const { id, type, code, line, column, packages } = event.data;
+
+  if (type === "init") {
+    await initPyodide(packages);
+    return;
+  }
 
   if (!pyodide || !jediReady) {
     ctx.postMessage({ id, result: type === "complete" ? [] : null });

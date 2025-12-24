@@ -48,6 +48,13 @@ export function useLSPWorker({
     const worker: Worker = new PythonLspWorker();
     workerRef.current = worker;
 
+    // Send init message with packages
+    const storedPackages = localStorage.getItem("pyodide_packages");
+    const packages = storedPackages
+      ? storedPackages.split("\n").filter((p) => p.trim() !== "")
+      : [];
+    worker.postMessage({ type: "init", packages });
+
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === "ready") {
         onLSPReadyRef.current();
