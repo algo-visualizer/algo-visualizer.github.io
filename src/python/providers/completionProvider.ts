@@ -1,5 +1,5 @@
 import React from "react";
-import { type Monaco } from "../types";
+import { type Monaco } from "../../layout/EditorPane/types";
 
 export const registerCompletionProvider = (
   monaco: Monaco,
