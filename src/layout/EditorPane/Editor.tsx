@@ -1,7 +1,8 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useEffect } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { type Monaco, type MonacoEditor } from "./types";
 import { useLSP, useBreakpoints, useActiveLineDecoration } from "./hooks";
+import { useLSPStore } from "@/stores/useLSPStore";
 
 interface EditorProps {
   value: string;
@@ -10,7 +11,6 @@ interface EditorProps {
   toggleBreakpoint: (line: number) => void;
   onChange: (value: string | undefined) => void;
   onBreakpointsChange: (newBreakpoints: Set<number>) => void;
-  onLSPReady: () => void;
 }
 
 const CodeEditor: React.FC<EditorProps> = ({
@@ -20,13 +20,26 @@ const CodeEditor: React.FC<EditorProps> = ({
   toggleBreakpoint,
   onChange,
   onBreakpointsChange,
-  onLSPReady,
 }) => {
   const editorRef = useRef<MonacoEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
+  const registerProvidersRef = useRef<((monaco: Monaco) => void) | null>(null);
+
+  const onLSPReady = useCallback(() => {
+    // Re-register providers when worker is ready (handled by useLSP)
+    // This is crucial for worker resets
+    if (monacoRef.current && registerProvidersRef.current) {
+      registerProvidersRef.current(monacoRef.current);
+    }
+  }, []);
 
   // LSP Worker and Provider management handled by hook
   const { registerProviders } = useLSP({ onLSPReady });
+
+  // Keep ref in sync
+  useEffect(() => {
+    registerProvidersRef.current = registerProviders;
+  }, [registerProviders]);
 
   // Breakpoint management
   const { setupBreakpointHandlers } = useBreakpoints(editorRef, monacoRef, {

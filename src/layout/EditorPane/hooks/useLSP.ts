@@ -1,18 +1,23 @@
-import { useRef, useEffect, useCallback, type RefObject } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { type Monaco } from "../types";
-import PythonLspWorker from "@/python/workers/pythonLspWorker?worker";
+import {
+  loadLSPService,
+  terminateWorker,
+  getLSPWorker,
+} from "@/python/pythonLSP";
 import {
   registerCompletionProvider,
   registerHoverProvider,
   registerSignatureHelpProvider,
 } from "@/python/providers";
+import { useWorkerStore } from "@/stores/useWorkerStore";
+import { useLSPStore } from "@/stores/useLSPStore";
 
 interface UseLSPWorkerOptions {
   onLSPReady: () => void;
 }
 
 interface UseLSPWorkerReturn {
-  workerRef: RefObject<Worker | null>;
   /**
    * Registers all LSP providers (completion, hover, signature help) to the monaco instance.
    * Handles internal cleanup of existing providers if called multiple times.
@@ -24,61 +29,54 @@ interface UseLSPWorkerReturn {
  * Hook to manage the LSP Worker lifecycle and provider registration.
  *
  * Responsibilities:
- * - Create and terminate the LSP worker
+ * - Initialize and terminate the LSP worker via pythonLSP module
  * - Provide a function to register providers on a Monaco instance
  * - Automatically clean up providers on unmount
  */
 export function useLSP({
   onLSPReady,
 }: UseLSPWorkerOptions): UseLSPWorkerReturn {
-  const workerRef = useRef<Worker | null>(null);
   // Store onReady in a ref to avoid recreating worker when callback changes
   const onLSPReadyRef = useRef(onLSPReady);
 
   // Track registered providers for cleanup
   const providersRef = useRef<Array<{ dispose: () => void }>>([]);
 
+  // Subscribe to LSP reset key
+  const lspResetKey = useWorkerStore((state) => state.lspResetKey);
+
+  const setIsLSPReady = useLSPStore((state) => state.setIsLSPReady);
+
   // Keep onReadyRef in sync
   useEffect(() => {
     onLSPReadyRef.current = onLSPReady;
   }, [onLSPReady]);
 
-  // Create worker on mount
+  // Initialize or reinitialize the worker when lspResetKey changes
   useEffect(() => {
-    const worker: Worker = new PythonLspWorker();
-    workerRef.current = worker;
-
-    // Send init message with packages
-    const storedPackages = localStorage.getItem("pyodide_packages");
-    const packages = storedPackages
-      ? storedPackages.split("\n").filter((p) => p.trim() !== "")
-      : [];
-    worker.postMessage({ type: "init", packages });
-
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === "ready") {
+    loadLSPService({
+      onLSPReady: () => {
         onLSPReadyRef.current();
-      }
-    };
-
-    worker.addEventListener("message", handleMessage);
+        setIsLSPReady(true);
+      },
+    });
 
     return () => {
-      worker.removeEventListener("message", handleMessage);
-      worker.terminate();
-      workerRef.current = null;
-
-      // Cleanup all registered providers
+      console.log("Terminating LSP worker");
+      terminateWorker();
+      // Cleanup all registered providers on unmount
       providersRef.current.forEach((p) => p.dispose());
       providersRef.current = [];
+      setIsLSPReady(false);
     };
-  }, []);
+  }, [lspResetKey]);
 
   /**
    * Register LSP providers to the given Monaco instance.
    */
   const registerProviders = useCallback((monaco: Monaco) => {
-    if (!workerRef.current) {
+    const worker = getLSPWorker();
+    if (!worker) {
       console.warn(
         "[LSP] Attempted to register providers before worker was ready.",
       );
@@ -90,11 +88,11 @@ export function useLSP({
 
     // Register new ones and store them in the ref
     providersRef.current = [
-      registerCompletionProvider(monaco, workerRef),
-      registerHoverProvider(monaco, workerRef),
-      registerSignatureHelpProvider(monaco, workerRef),
+      registerCompletionProvider(monaco, worker),
+      registerHoverProvider(monaco, worker),
+      registerSignatureHelpProvider(monaco, worker),
     ];
   }, []);
 
-  return { workerRef, registerProviders };
+  return { registerProviders };
 }

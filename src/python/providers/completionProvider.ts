@@ -1,14 +1,12 @@
-import React from "react";
 import { type Monaco } from "../../layout/EditorPane/types";
 
 export const registerCompletionProvider = (
   monaco: Monaco,
-  workerRef: React.RefObject<Worker | null>,
+  worker: Worker | null,
 ) => {
   return monaco.languages.registerCompletionItemProvider("python", {
     triggerCharacters: ["."],
     provideCompletionItems: (model: any, position: any) => {
-      const worker = workerRef.current;
       if (!worker) return { suggestions: [] } as any;
 
       const code = model.getValue();

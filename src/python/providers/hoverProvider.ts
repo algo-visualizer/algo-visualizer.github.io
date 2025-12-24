@@ -1,13 +1,11 @@
-import React from "react";
 import { type Monaco } from "../../layout/EditorPane/types";
 
 export const registerHoverProvider = (
   monaco: Monaco,
-  workerRef: React.RefObject<Worker | null>,
+  worker: Worker | null,
 ) => {
   return monaco.languages.registerHoverProvider("python", {
     provideHover: (model: any, position: any) => {
-      const worker = workerRef.current;
       if (!worker) return null;
 
       const code = model.getValue();

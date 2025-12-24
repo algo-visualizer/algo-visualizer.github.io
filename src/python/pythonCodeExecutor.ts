@@ -6,6 +6,18 @@ let worker: Worker | null = null;
 // Track the current running execution
 let currentRunResolve: ((result: ExecutionResult) => void) | null = null;
 
+/**
+ * Terminates the current worker and resets the module state.
+ * Call this before reinitializing with new packages.
+ */
+export const terminateWorker = (): void => {
+  if (worker) {
+    worker.terminate();
+    worker = null;
+  }
+  currentRunResolve = null;
+};
+
 interface LoadPyodideCallback {
   onPyodideReady: () => void;
   batchedStdoutResolve: (output: string) => void;
@@ -15,6 +27,7 @@ export const loadPyodideService = async ({
   onPyodideReady,
   batchedStdoutResolve,
 }: LoadPyodideCallback): Promise<void> => {
+  // If worker already exists, skip (use terminateWorker first to reinitialize)
   if (worker) return;
 
   worker = new PythonExecutionWorker();

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { X, Package } from "lucide-react";
+import { X, Package, RefreshCw } from "lucide-react";
 import { useUIStore } from "../stores/useUIStore";
+import { useWorkerStore } from "../stores/useWorkerStore";
 
 const Settings: React.FC = () => {
   const isSettingsOpen = useUIStore((state) => state.isSettingsOpen);
   const setIsSettingsOpen = useUIStore((state) => state.setIsSettingsOpen);
+  const resetAllWorkers = useWorkerStore((state) => state.resetAllWorkers);
   const [activeTab, setActiveTab] = useState<"packages">("packages");
   const [packages, setPackages] = useState<string>("");
+  const [isReloading, setIsReloading] = useState(false);
 
   useEffect(() => {
     const storedPackages = localStorage.getItem("pyodide_packages");
@@ -18,6 +21,13 @@ const Settings: React.FC = () => {
   const handleSave = (value: string) => {
     setPackages(value);
     localStorage.setItem("pyodide_packages", value);
+  };
+
+  const handleReloadEnvironment = () => {
+    setIsReloading(true);
+    resetAllWorkers();
+    // Reset the button state after a short delay
+    setTimeout(() => setIsReloading(false), 1000);
   };
 
   if (!isSettingsOpen) return null;
@@ -84,15 +94,27 @@ const Settings: React.FC = () => {
                   </p>
                 </div>
                 <textarea
-                  className="w-full h-48 md:h-64 bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-sm font-mono text-zinc-200 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 resize-none placeholder:text-zinc-600"
+                  className="w-full h-48 md:h-48 bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-sm font-mono text-zinc-200 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 resize-none placeholder:text-zinc-600"
                   placeholder="numpy&#10;requests"
                   value={packages}
                   onChange={(e) => handleSave(e.target.value)}
                   spellCheck={false}
                 />
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleReloadEnvironment}
+                    disabled={isReloading}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
+                  >
+                    <RefreshCw
+                      className={`w-4 h-4 ${isReloading ? "animate-spin" : ""}`}
+                    />
+                    {isReloading ? "Reloading..." : "Reload Environment"}
+                  </button>
+                </div>
                 <div className="p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
                   <p className="text-xs text-zinc-500">
-                    Note: Changes require a page reload to take effect. Only
+                    Click "Reload Environment" to apply package changes. Only
                     pure Python packages or packages with Pyodide wheels are
                     supported.
                   </p>
