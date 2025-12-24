@@ -53,7 +53,7 @@ const CodeEditor: React.FC<EditorProps> = ({
   );
 
   return (
-    <div className="h-full w-full overflow-hidden">
+    <div className="h-full w-full">
       <Editor
         height="100%"
         defaultLanguage="python"

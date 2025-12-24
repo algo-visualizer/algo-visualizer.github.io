@@ -48,7 +48,7 @@ const App: React.FC = () => {
       {isDesktop ? (
         <Group
           orientation="horizontal"
-          className="flex-1 flex flex-col lg:flex-row overflow-hidden relative"
+          className="flex-1 flex flex-col lg:flex-row relative min-h-0"
           defaultLayout={{ left: 50, right: 50 }}
           onLayoutChange={handleLayoutChange}
         >
@@ -65,7 +65,7 @@ const App: React.FC = () => {
           </Panel>
         </Group>
       ) : (
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+        <div className="flex-1 flex flex-col lg:flex-row relative min-h-0">
           <EditorPane isActive={activeMobileTab === "editor"}>
             <LowerPanel />
           </EditorPane>
