@@ -1,4 +1,4 @@
-export const INITIAL_CODE = `from visual import *
+export const INITIAL_CODE_1 = `from visual import *
 
 # Click the gutter on the left to add breakpoints (red dots)
 # Then click "Visualize" below.
@@ -143,3 +143,59 @@ for key in keys:
 
 breakpoint()
 `;
+
+export const INITIAL_CODE_4 = `from micrograd.nn import MLP
+from visual import *
+
+array('[round(p.data, 2) for p in n.parameters()]', expr=True)
+
+# 定义一个 MLP：
+# 输入维度为 3
+# 两个隐藏层，每层 4 个神经元
+# 输出维度为 1
+n = MLP(3, [4, 4, 1])
+
+xs = [
+  [2.0, 3.0, -1.0],
+  [3.0, -1.0, 0.5],
+  [0.5, 1.0, 1.0],
+  [1.0, 1.0, -1.0],
+]
+ys = [1.0, -1.0, -1.0, 1.0] # 目标标签
+
+for k in range(100):
+
+    breakpoint('k % 5 == 0')
+    
+    # 1. 前向传播 (Forward pass)
+    ypred = [n(x) for x in xs]
+    # 计算均方误差损失 (L2 Loss)
+    loss = sum((yout - ygt)**2 for ygt, yout in zip(ys, ypred))
+    
+    # 2. 清空梯度 (Zero grad)
+    n.zero_grad()
+    
+    # 3. 反向传播 (Backward pass)
+    loss.backward()
+
+    import micrograd
+    
+    # 4. 更新权重 (Update/Stochastic Gradient Descent)
+    for p in n.parameters():
+        p.data += -0.01 * p.grad
+    
+    print(f"Step {k}, loss: {loss.data:.4f}")
+
+print('------------ TEST --------------')
+
+test_xs = [
+    [1.0, 1.0, 1.0],
+    [-1.0, -1.0, 0.0],
+    [2.0, 3.0, -1.0],
+]
+
+results = [n(x).data for x in test_xs]
+print(results)
+`;
+
+export default INITIAL_CODE_3;

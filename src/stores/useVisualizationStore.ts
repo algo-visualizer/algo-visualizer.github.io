@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { INITIAL_CODE_2 } from "../constants";
+import INITIAL_CODE from "../constants";
 import { type Snapshot, type LogEntry, type ExecutionResult } from "../types";
 
 interface VisualizationState {
@@ -42,7 +42,7 @@ interface VisualizationState {
 }
 
 export const useVisualizationStore = create<VisualizationState>((set, get) => ({
-  code: INITIAL_CODE_2,
+  code: INITIAL_CODE,
   breakpoints: new Set(),
   history: [],
   currentStep: -1,
