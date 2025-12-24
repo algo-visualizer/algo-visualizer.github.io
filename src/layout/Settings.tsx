@@ -95,7 +95,7 @@ const Settings: React.FC = () => {
                 </div>
                 <textarea
                   className="w-full h-48 md:h-48 bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-sm font-mono text-zinc-200 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 resize-none placeholder:text-zinc-600"
-                  placeholder="numpy&#10;requests"
+                  placeholder="numpy&#10;micrograd"
                   value={packages}
                   onChange={(e) => handleSave(e.target.value)}
                   spellCheck={false}
