@@ -2,7 +2,6 @@ import React, { useRef, useCallback, useEffect } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { type Monaco, type MonacoEditor } from "./types";
 import { useLSP, useBreakpoints, useActiveLineDecoration } from "./hooks";
-import { useLSPStore } from "@/stores/useLSPStore";
 
 interface EditorProps {
   value: string;
