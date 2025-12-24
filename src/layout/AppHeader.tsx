@@ -2,12 +2,13 @@ import React from "react";
 import { BookOpen, Menu, Settings as SettingsIcon } from "lucide-react";
 import { useVisualizationStore } from "../stores/useVisualizationStore";
 import { useUIStore } from "../stores/useUIStore";
+import { useLSPStore } from "../stores/useLSPStore";
 
 const AppHeader: React.FC = () => {
   const isCodeExecutorReady = useVisualizationStore(
     (state) => state.isCodeExecutorReady,
   );
-  const isLSPReady = useVisualizationStore((state) => state.isLSPReady);
+  const isLSPReady = useLSPStore((state) => state.isLSPReady);
   const setIsMenuOpen = useUIStore((state) => state.setIsMenuOpen);
   const setIsSettingsOpen = useUIStore((state) => state.setIsSettingsOpen);
 

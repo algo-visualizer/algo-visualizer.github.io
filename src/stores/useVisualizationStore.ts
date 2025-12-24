@@ -11,7 +11,7 @@ interface VisualizationState {
   isVisualized: boolean;
   error: string | null;
   isCodeExecutorReady: boolean;
-  isLSPReady: boolean;
+
   consoleLogs: LogEntry[];
   runCode:
     | ((code: string, breakpoints: Set<number>) => Promise<ExecutionResult>)
@@ -22,7 +22,7 @@ interface VisualizationState {
   setBreakpoints: (breakpoints: Set<number>) => void;
   toggleBreakpoint: (line: number) => void;
   setIsCodeExecutorReady: (ready: boolean) => void;
-  setIsLSPReady: (ready: boolean) => void;
+
   setConsoleLogs: (
     logs: LogEntry[] | ((prev: LogEntry[]) => LogEntry[]),
   ) => void;
@@ -50,7 +50,7 @@ export const useVisualizationStore = create<VisualizationState>((set, get) => ({
   isVisualized: false,
   error: null,
   isCodeExecutorReady: false,
-  isLSPReady: false,
+
   consoleLogs: [],
   runCode: null,
 
@@ -73,7 +73,6 @@ export const useVisualizationStore = create<VisualizationState>((set, get) => ({
 
   setIsCodeExecutorReady: (isCodeExecutorReady) =>
     set({ isCodeExecutorReady: isCodeExecutorReady }),
-  setIsLSPReady: (isLSPReady) => set({ isLSPReady }),
 
   setConsoleLogs: (logs) =>
     set((state) => ({

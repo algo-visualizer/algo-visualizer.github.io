@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { type Monaco, type MonacoEditor } from "./types";
-import { useLSPWorker, useBreakpoints, useActiveLineDecoration } from "./hooks";
+import { useLSP, useBreakpoints, useActiveLineDecoration } from "./hooks";
 
 interface EditorProps {
   value: string;
@@ -26,7 +26,7 @@ const CodeEditor: React.FC<EditorProps> = ({
   const monacoRef = useRef<Monaco | null>(null);
 
   // LSP Worker and Provider management handled by hook
-  const { registerProviders } = useLSPWorker({ onLSPReady });
+  const { registerProviders } = useLSP({ onLSPReady });
 
   // Breakpoint management
   const { setupBreakpointHandlers } = useBreakpoints(editorRef, monacoRef, {

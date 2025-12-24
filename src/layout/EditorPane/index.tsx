@@ -2,6 +2,7 @@ import React, { type ReactNode } from "react";
 import CodeEditor from "./Editor";
 import { AlertCircle } from "lucide-react";
 import { useVisualizationStore } from "../../stores/useVisualizationStore";
+import { useLSPStore } from "../../stores/useLSPStore";
 import "./style.css";
 
 interface EditorPaneProps {
@@ -21,7 +22,7 @@ const EditorPane: React.FC<EditorPaneProps> = ({ isActive, children }) => {
   );
   const setError = useVisualizationStore((state) => state.setError);
   const setBreakpoints = useVisualizationStore((state) => state.setBreakpoints);
-  const setIsLSPReady = useVisualizationStore((state) => state.setIsLSPReady);
+  const setIsLSPReady = useLSPStore((state) => state.setIsLSPReady);
 
   const currentSnapshot = history[currentStep] || null;
   const activeLine = currentSnapshot ? currentSnapshot.line : null;

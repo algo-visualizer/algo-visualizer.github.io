@@ -28,7 +28,7 @@ interface UseLSPWorkerReturn {
  * - Provide a function to register providers on a Monaco instance
  * - Automatically clean up providers on unmount
  */
-export function useLSPWorker({
+export function useLSP({
   onLSPReady,
 }: UseLSPWorkerOptions): UseLSPWorkerReturn {
   const workerRef = useRef<Worker | null>(null);
