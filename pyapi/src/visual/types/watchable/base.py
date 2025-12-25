@@ -1,8 +1,7 @@
-from inspect import currentframe
-from abc import ABC, abstractmethod
 from types import FrameType
-from typing import override
-from visual.types.graph import GraphUnion, VarGraph
+from abc import ABC, abstractmethod
+from visual.types.graph import GraphUnion
+from inspect import currentframe
 
 class _NotCaptured:
     pass
@@ -100,24 +99,3 @@ class Watchable(ABC):
             Graph: The generated graph representation
         """
         pass
-
-class Var(Watchable): 
-    
-    def __init__(self, var: str, *, expr: bool = False):
-        super().__init__(var, expr=expr)
-
-    @override
-    def generate_graph(self, frame = None) -> VarGraph:
-        if frame is None:
-            frame = _get_caller_frame(currentframe())
-        curr_value = self.capture(frame)
-
-        frameid, parent_frameid = str(id(frame)), None
-        if (parent_frame := frame.f_back) is not None:
-            parent_frameid = str(id(parent_frame))
-        return VarGraph(
-            frameid=frameid,
-            parent_frameid=parent_frameid,
-            notcaptured=True if isinstance(curr_value, _NotCaptured) else False,
-            content=repr(curr_value),
-        )

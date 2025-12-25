@@ -5,8 +5,8 @@ This module provides debugging and visualization capabilities for Python code ex
 in the browser via Pyodide.
 """
 
-from visual.types.watchable import Var
-from visual.types.pointable import (
+from visual.types.watchable import (
+    Var,
     Array,
     Array2D,
     Array3D,
