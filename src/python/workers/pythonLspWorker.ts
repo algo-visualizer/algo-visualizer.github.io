@@ -17,9 +17,7 @@ async function initPyodide(packages: string[] = []) {
     // Install Jedi
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install("visual", {
-      index_urls: "https://test.pypi.org/simple/",
-    });
+    await micropip.install("visual");
     await micropip.install(
       `/pyodide_packages/python_lsp-0.0.0-py3-none-any.whl`,
     );

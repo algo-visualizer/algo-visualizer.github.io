@@ -20,9 +20,7 @@ async function initPyodide(packages: string[] = []) {
 
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install("visual", {
-      index_urls: "https://test.pypi.org/simple/",
-    });
+    await micropip.install("visual");
 
     // Install user defined packages
     if (packages.length > 0) {
