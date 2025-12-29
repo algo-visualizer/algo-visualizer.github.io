@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/devcontainers/typescript-node:22 as base
 
-WORKDIR /workspaces/algo-visualizer
+WORKDIR /workspaces/algo-visualizer.github.io
 
 SHELL ["/bin/bash", "-c"]
 
