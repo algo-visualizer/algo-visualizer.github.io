@@ -4,7 +4,6 @@ export const INITIAL_CODE_1 = `from visual import *
 # Then click "Visualize" below.
 # You can also manually call breakpoint() in your code.
 # You can use var('var_name'), array('iterable_name'), etc. to track variables. 
-# [API documentation](https://algo-visualizer.github.io/docs/visual.html)
 
 array('nums').index('i', 'n').index('i-1', 'i-2', expr=True)
 array('dp').index('i', 'n').index('i-1', 'i-2', expr=True)

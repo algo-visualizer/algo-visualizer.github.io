@@ -18,12 +18,11 @@ async function initPyodide(packages: string[] = []) {
       },
     });
 
-    // Install local algo-visualizer-python package from /public/pyodide/
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install(
-      "/pyodide_packages/algo_visualizer_python-0.0.0-py3-none-any.whl",
-    );
+    await micropip.install("visual", {
+      index_urls: "https://test.pypi.org/simple/",
+    });
 
     // Install user defined packages
     if (packages.length > 0) {
