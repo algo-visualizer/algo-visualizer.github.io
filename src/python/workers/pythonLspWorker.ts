@@ -17,10 +17,8 @@ async function initPyodide(packages: string[] = []) {
     // Install Jedi
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install("visual");
-    await micropip.install(
-      `/pyodide_packages/python_lsp-0.0.0-py3-none-any.whl`,
-    );
+    await micropip.install("algo-visualizer");
+    await micropip.install("jedi-lsp-wrapper");
 
     // Install user defined packages
     if (packages.length > 0) {

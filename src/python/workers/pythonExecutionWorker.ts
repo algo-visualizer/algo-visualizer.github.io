@@ -20,7 +20,7 @@ async function initPyodide(packages: string[] = []) {
 
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install("visual");
+    await micropip.install("algo-visualizer");
 
     // Install user defined packages
     if (packages.length > 0) {
