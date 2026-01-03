@@ -58,7 +58,7 @@ const AppHeader: React.FC = () => {
         <span>Settings</span>
       </button>
       <a
-        href="/docs/visual.html"
+        href="/pyapi/"
         target="_blank"
         rel="noopener noreferrer"
         className="ml-2 hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-100 bg-zinc-800/50 hover:bg-zinc-700/70 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-200 group"
