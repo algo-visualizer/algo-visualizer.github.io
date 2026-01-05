@@ -5,7 +5,7 @@ import {
   PlayCircle,
   Loader2,
   Check,
-  Eye,
+  FileDiff,
   Terminal,
 } from "lucide-react";
 import { useVisualizationStore } from "../stores/useVisualizationStore";
@@ -63,7 +63,7 @@ const Controls: React.FC = () => {
               ${activePanel === "instrumented" ? "border-emerald-500/50 bg-emerald-950/50 text-emerald-300" : "border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"}
             `}
             >
-              <Eye className="w-4 h-4" />
+              <FileDiff className="w-4 h-4" />
             </button>
             <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 whitespace-nowrap px-2 py-1 rounded bg-zinc-800 text-xs text-zinc-200 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hidden sm:block">
               Preview instrumented code
